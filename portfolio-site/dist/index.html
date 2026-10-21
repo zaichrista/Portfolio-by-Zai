@@ -14,8 +14,8 @@
 </head>
 <body>
   <header class="site-head">
-    <a href="index.html">zaira<br>christa</a>
-    <nav aria-label="Main navigation"><a href="index.html">home</a><span aria-hidden="true">,</span><a href="about.html">about</a><span aria-hidden="true">,</span><a href="work.html">work</a><span aria-hidden="true">,</span><a href="cv.html">CV</a></nav>
+    <a href="index.html" data-go="home">zaira<br>christa</a>
+    <nav aria-label="Main navigation"><a href="index.html" data-go="home">home</a><span aria-hidden="true">,</span><a href="about.html" data-go="about">about</a><span aria-hidden="true">,</span><a href="work.html" data-go="work">work</a><span aria-hidden="true">,</span><a href="cv.html">CV</a></nav>
   </header>
 
   <p class="hint" id="hint" aria-hidden="true">(keep going)</p>
@@ -37,7 +37,84 @@
     <div id="subfade"><p class="sub">web designer + brand strategist</p></div>
     </div>
   </main>
-  <div class="scroll-space" aria-hidden="true"></div>
+  <div class="bg" id="bg" aria-hidden="true"></div>
+  <div class="flow-mask" id="flowMask">
+    <div class="flow" id="flow">
+      <section class="work" id="work" aria-labelledby="work-h">
+        <h2 class="label" id="work-h">work <span>(04)</span></h2>
+        <ol class="rows">
+      <li><a class="row" href="work/project-01/"><span class="brand">BRAND NAME</span><span class="role">ROLE</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="work/project-02/"><span class="brand">BRAND NAME</span><span class="role">ROLE</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="work/project-03/"><span class="brand">BRAND NAME</span><span class="role">ROLE</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="work/project-04/"><span class="brand">BRAND NAME</span><span class="role">ROLE</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+        </ol>
+      </section>
+
+      <section class="about" id="about" aria-labelledby="about-h">
+        <h2 class="label" id="about-h">about</h2>
+        <p class="statement">[A short statement about who you are and the kind of work you make. Two or three lines, set big.]</p>
+        <div class="cols">
+          <p>[Paragraph one. Your background and how you found your way into design.]</p>
+          <p>[Paragraph two. How you work with brands and what you bring to a project.]</p>
+          <ul class="list" aria-label="Services">
+            <li class="label">services</li>
+            <li>[Service one]</li>
+            <li>[Service two]</li>
+            <li>[Service three]</li>
+          </ul>
+        </div>
+      </section>
+
+      <footer class="foot">
+        <div class="hire">
+          <p class="note">(psst, I'm open to new projects and jobs)</p>
+          <a class="hire-link" href="mailto:zcbarakat@gmail.com">Hire me! <span aria-hidden="true">↗</span></a>
+          <p class="note">tell me what you're making. I'd love to hear about it.</p>
+        </div>
+
+        <section class="cv" aria-labelledby="cv-h">
+          <h2 class="label" id="cv-h">The CV, abridged <span>(Zaira Christa Barakat, london)</span></h2>
+          <p class="bio">Web designer + brand strategist. Builds sites end to end in Wix and in HTML + JavaScript, then works out what a page is failing to do (a missing call to action, say) and fixes it. King's College London MA, Oxford BA, a good eye for what's right and what's <em>nearly</em> right.</p>
+
+          <ul class="stats" aria-label="By the numbers">
+            <li><b>+33%</b><span>ticket sales for Oxford Fashion Gala, running the Instagram campaign (300 → 400)</span></li>
+            <li><b>×2</b><span>ticket sales as co-creative director, concept to runway (150 → 300)</span></li>
+            <li><b>1k → 6k</b><span>accounts engaged in the two weeks after The Reach Riverside launched</span></li>
+            <li><b>2</b><span>London Fashion Week runway shows. Press: British Vogue, Vanity Fair</span></li>
+          </ul>
+
+          <div class="cv-cols">
+            <div>
+              <h3 class="label">where I've been</h3>
+              <p><b>Brand Strategist &amp; Designer</b><br>four-restaurant group, West London<br><i>Sep 2024 – now</i><br>Repositioned The Reach as The Reach Riverside (brief, identity, Wix site). Mapped Mandaloun's journey to booking, found the site had no clear call to action, briefed a menu-led redesign. Brand audits for all four restaurants.</p>
+              <p><b>Stylist</b>, Levi's, London<br><i>Sep – Dec 2025</i><br>Styled a look around one jean and sold out that style in store.</p>
+              <p><b>Creative Lead</b>, Zaira Christa (my fashion label)<br><i>2023</i><br>Two LFW shows, a team of six.</p>
+            </div>
+            <div>
+              <h3 class="label">where I learned</h3>
+              <p><b>King's College London</b><br>MA Cultural and Creative Industries, 2025 – 26</p>
+              <p><b>Oxford, Somerville</b><br>BA Music, 2:1, 2022 – 25</p>
+              <p><b>Side quests</b><br>Oxford's first AI fashion catwalk (Oxford Mail covered it).<br>BEKAA, a hospitality concept from research to financial plan.<br>A Claude Code + Codex workflow that cuts a week from each project's research.</p>
+            </div>
+            <div>
+              <h3 class="label">what's in the toolbox</h3>
+              <p>Wix, HTML, JavaScript, GitHub Pages, Claude Code, Codex<br>Illustrator, Photoshop, InDesign, Premiere, Canva, PowerPoint<br>Instagram, TikTok, Meta Business Suite</p>
+              <p>Cultural strategy, brand positioning, creative briefs, customer journeys, ethnography, copywriting</p>
+              <h3 class="label">off duty</h3>
+              <p>Classical piano • Choi Kwang Do (black belt) • College rowing • Somerville College Choir</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="legal">
+          <span>© 2026 Zaira Christa</span>
+          <nav aria-label="Legal"><a href="#">Cookies</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></nav>
+          <nav aria-label="Elsewhere"><a href="mailto:zcbarakat@gmail.com">Email</a><a href="https://linkedin.com/in/zairachrista">LinkedIn</a><a href="#">Instagram</a></nav>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <div class="scroll-space" id="spacer" aria-hidden="true"></div>
 
   <script>
   (function () {
@@ -46,14 +123,16 @@
     var counter = document.getElementById('counter');
     var CX = 1197, CY = 624.5;
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) root.classList.add('reduced');
 
     function setAngle(a) { ring.setAttribute('transform', 'rotate(' + a + ' ' + CX + ' ' + CY + ')'); }
 
     // Scrolling turns the C anti-clockwise and carries us through it: the C moves to the middle of the
     // window and grows, its centre fades to sky blue, and the blue ends up filling the whole window.
-    var DEG_PER_PX = 0.12, FOLLOW = 0.08;
+    var DEG_PER_PX = 0.1, FOLLOW = 0.08;
     var HINT_IDLE_MS = 900;              // how long scrolling must stop before "(keep going)" appears
     var RANGE_VH = 1.5;                  // scroll distance (in window heights) over which the zoom plays
+    var HOLD_VH = .3;                    // extra distance the work list stays put, so a hard scroll up doesn't start closing the C
     var VIEW_W = 920, C_INNER_R = 183, C_OFFSET_X = 1197 - 1000;  // lockup viewBox units
     function clamp01(x) { return Math.max(0, Math.min(1, x)); }
     function smooth(a, b, x) { var t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); }
@@ -65,23 +144,79 @@
       var zfade = document.getElementById('zfade');
       var subfade = document.getElementById('subfade');
       var hint = document.getElementById('hint');
+      var bg = document.getElementById('bg');
+      var mask = document.getElementById('flowMask');
+      var flow = document.getElementById('flow');
+      var about = document.getElementById('about');
+      var spacer = document.getElementById('spacer');
       var lastMove = performance.now(), hintShown = false;
-      var unit, maxScale;
+      var unit, maxScale, vh, zoomDone, zoomEnd, aboutTop;
+      var SKY = [135, 206, 235], BLUSH = [247, 212, 214];
       function measure() {
         unit = wrap.offsetWidth / VIEW_W;  // px per viewBox unit (offsetWidth ignores transforms)
         // big enough that the C's inner edge sits beyond the window corners
         maxScale = 1.1 * Math.hypot(window.innerWidth, window.innerHeight) / 2 / (C_INNER_R * unit);
+        vh = window.innerHeight;
+        zoomDone = vh * RANGE_VH;          // scrollY at which the blue fills the window
+        zoomEnd = vh * (RANGE_VH + HOLD_VH); // scrollY at which the work list starts moving; in between everything holds still
+        aboutTop = about.offsetTop;
+        // last scroll position puts the bottom of the footer at the bottom of the window
+        spacer.style.height = (zoomEnd + flow.offsetHeight) + 'px';
       }
       measure();
       window.addEventListener('resize', measure);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+      // Programmatic scrolls (nav links). Home is special: the words stay where they are and fade
+      // while the C comes back, and the C keeps turning until we're at the top.
+      var drive = null;
+      function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+      function go(to, home) {
+        var from = window.scrollY;
+        if (Math.abs(to - from) < 2) return;
+        drive = { from: from, to: to, t0: performance.now(), home: home,
+                  dur: Math.min(3600, 1100 + Math.abs(to - from) * 0.22),
+                  shift: Math.max(0, from - zoomEnd), pStart: clamp01(from / zoomDone) };
+      }
+      function stop() { drive = null; }
+      ['wheel', 'touchstart', 'keydown'].forEach(function (n) { window.addEventListener(n, stop, { passive: true }); });
+
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest && e.target.closest('a[data-go]');
+        if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+        e.preventDefault();
+        var where = a.getAttribute('data-go');
+        go(where === 'home' ? 0 : where === 'work' ? zoomEnd : zoomEnd + aboutTop, where === 'home');
+      });
+
+      // Tabbing to a link off-screen would scroll the clipped window natively; scroll the page instead.
+      mask.addEventListener('scroll', function () { mask.scrollTop = 0; });
+      mask.addEventListener('focusin', function (e) {
+        mask.scrollTop = 0;
+        var shift = Math.max(0, window.scrollY - zoomEnd);
+        var top = e.target.getBoundingClientRect().top + shift;
+        go(zoomEnd + Math.max(0, top - vh * .4), false);
+      });
 
       var current = 0;
-      (function frame() {
-        var y = window.scrollY;
-        current += (y - current) * FOLLOW;
-        if (Math.abs(y - current) < 0.1) current = y;
-        var p = clamp01(current / (window.innerHeight * RANGE_VH));
-        if (Math.abs(y - current) > 0.5) lastMove = performance.now();
+      (function frame(now) {
+        var y, p, shift, homing = false, e = 0;
+        if (drive) {
+          var t = clamp01((now - drive.t0) / drive.dur);
+          e = ease(t);
+          y = drive.from + (drive.to - drive.from) * e;
+          window.scrollTo(0, y);
+          current = y;
+          homing = drive.home;
+          if (t >= 1) drive = null;
+        } else {
+          y = window.scrollY;
+          current += (y - current) * FOLLOW;
+          if (Math.abs(y - current) < 0.1) current = y;
+        }
+        if (homing) { p = drive ? drive.pStart * (1 - e) : 0; shift = drive ? drive.shift : 0; }
+        else { p = clamp01(current / zoomDone); shift = Math.max(0, current - zoomEnd); }
+        if (Math.abs(y - current) > 0.5 || drive) lastMove = performance.now();
         // paused partway through: nudge them on. It sits under the C, so the C covers it as it grows.
         // once shown it stays (no fade-out) until the black of the C covers it, or we're back at the top
         if (p <= .03 || p >= .9) hintShown = false;
@@ -96,13 +231,27 @@
         var textOpacity = 1 - smooth(0, .3, p);
         zfade.setAttribute('opacity', textOpacity);
         subfade.style.opacity = textOpacity;
+
+        // The colour layer and the work column are clipped to the C's blue circle, so the rows are already in
+        // place while it opens, and going home they stay put at full strength and only leave as the blue does.
+        var r = disc.getBoundingClientRect();
+        var clip = 'circle(' + (r.width / 2 * C_INNER_R / 185) + 'px at ' + (r.left + r.width / 2) + 'px ' + (r.top + r.height / 2) + 'px)';
+        // Opening: the rows fade in once the disc is fully blue (p = .6). Going home they stay full strength
+        // and only go as the blue goes.
+        var on = homing ? smooth(.08, .6, p) : smooth(.6, .75, p);
+        var k = smooth(aboutTop - vh * .9, aboutTop - vh * .1, shift);   // blue -> blush as the about section arrives
+        bg.style.clipPath = mask.style.clipPath = clip;
+        bg.style.opacity = mask.style.opacity = on;
+        bg.style.backgroundColor = 'rgb(' + SKY.map(function (c, i) { return Math.round(c + (BLUSH[i] - c) * k); }).join(',') + ')';
+        mask.style.pointerEvents = p >= .97 ? 'auto' : 'none';
+        flow.style.transform = 'translate3d(0,' + (-shift) + 'px,0)';
         requestAnimationFrame(frame);
-      })();
+      })(performance.now());
     }
 
     if (!root.classList.contains('loading')) { initScroll(); return; } // already seen this session: no loader
     var LOAD_MS = reduce ? 600 : 2800;   // time the counter takes to reach 100
-    var V0 = 0.36;                       // spin speed in deg/ms, constant until 100 and the speed the slow-down starts from
+    var V0 = 0.3;                        // spin speed in deg/ms, constant until 100 and the speed the slow-down starts from
     var MIN_EXTRA = 90;                  // least extra rotation after 100 before the gap lands facing right
 
     function setCount(n) { counter.textContent = String(n).padStart(3, '0') + '%'; }

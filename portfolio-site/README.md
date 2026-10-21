@@ -4,7 +4,7 @@ A lightweight static portfolio skeleton with a home page, work index, CV, and fo
 
 ## Pages
 
-- `dist/index.html` — home page
+- `dist/index.html` — home page and the one-page scroll: logo zoom → work list (blue) → about (blush) → footer. Nav links for home/about/work scroll within it; `work.html` and `about.html` remain as fallbacks
 - `dist/work.html` — four selected projects
 - `dist/about.html` — an introduction to the designer and their practice
 - `dist/cv.html` — experience, education, skills, and contact

@@ -4,6 +4,18 @@
   font-display: block;
   src: url(fonts/plex-mono-400.woff2) format('woff2');
 }
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-weight: 500;
+  font-display: block;
+  src: url(fonts/plex-mono-500.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-weight: 700;
+  font-display: block;
+  src: url(fonts/plex-mono-700.woff2) format('woff2');
+}
 
 :root {
   --ink: #000;
@@ -53,6 +65,80 @@ a { color: inherit; text-decoration: none; }
 }
 .hint.show { opacity: 1; transition: opacity .6s ease; }
 
-/* Gives the page something to scroll so the C can turn; swap for real content later. */
+/* Real height is set in JS (zoom distance + content height); this is only the no-JS fallback. */
 .scroll-space { height: 400vh; }
 .loading, .loading body { overflow: hidden; }
+
+:root { --sky: #87ceeb; --blush: #f7d4d6; --gutter: 1.75vw; --small: clamp(13px, 1.05vw, 21px); }
+
+/* Work, about and footer live in one tall column inside a fixed window; JS slides it up as you scroll.
+   The bg sits behind it and takes over from the C's blue disc once the disc fills the window. */
+.bg, .flow-mask { position: fixed; inset: 0; z-index: 1; opacity: 0; pointer-events: none; }
+.flow-mask { overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 5vh, #000 12vh); mask-image: linear-gradient(to bottom, transparent 0, transparent 5vh, #000 12vh); }
+.flow { position: relative; will-change: transform; padding-inline: var(--gutter); }
+.flow a:hover { text-decoration: underline; text-underline-offset: .25em; }
+.label { margin: 0; font-weight: 700; font-size: var(--small); }
+.label span { opacity: .6; font-weight: 400; }
+
+.work { padding: 17vh 0 22vh; }
+.rows { list-style: none; margin: 4vh 0 0; padding: 0; }
+.row {
+  display: grid; grid-template-columns: 1.5fr 1fr auto; align-items: baseline; gap: 2vw;
+  padding: 2.1vw 0; border-top: 1px solid #000; transition: opacity .3s ease;
+}
+.rows li:last-child .row { border-bottom: 1px solid #000; }
+.brand { font-size: clamp(22px, 4.1vw, 84px); line-height: 1; letter-spacing: -.01em; }
+.role, .more { font-size: var(--small); }
+.more span { display: inline-block; transition: transform .25s ease; }
+.rows:hover .row { opacity: .35; }
+.rows .row:hover { opacity: 1; text-decoration: none; }
+.row:hover .more span { transform: translate(.2em, -.2em); }
+
+.about { padding: 24vh 0 26vh; min-height: 100vh; }
+.statement { max-width: 17em; margin: 5vh 0 12vh; font-size: clamp(24px, 3.9vw, 78px); line-height: 1.1; letter-spacing: -.01em; }
+.cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2vw; font-size: var(--small); line-height: 1.5; }
+.cols p { margin: 0; max-width: 30em; }
+.list { list-style: none; margin: 0; padding: 0; }
+.list li + li { margin-top: .4em; }
+.list .label { margin-bottom: .8em; }
+
+.foot { display: flex; flex-direction: column; gap: 14vh; padding: 0 0 var(--gutter); border-top: 1px solid #000; }
+.hire { padding-top: 6vh; }
+.cv .bio { max-width: 40em; margin: 3vh 0 8vh; font-size: clamp(18px, 2.1vw, 40px); line-height: 1.25; }
+.stats { list-style: none; margin: 0 0 9vh; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2vw; }
+.stats li { border-top: 1px solid #000; padding-top: 1.2vw; }
+.stats b { display: block; font-weight: 400; font-size: clamp(34px, 5.4vw, 104px); line-height: 1; letter-spacing: -.03em; margin-bottom: .5em; }
+.stats span { display: block; font-size: var(--small); line-height: 1.45; max-width: 22em; }
+.cv-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2vw; font-size: var(--small); line-height: 1.5; }
+.cv-cols p { margin: 0 0 1.4em; max-width: 30em; }
+.cv-cols .label { margin: 0 0 .9em; }
+.cv-cols p + .label { margin-top: 2.4em; }
+.cv-cols b { font-weight: 500; }   /* headings 700, job titles / institutions 500, what I did 400 */
+.note { margin: 0; font-size: var(--small); }
+.hire-link { display: inline-block; margin: 3vh 0 2.5vh; font-size: clamp(52px, 13vw, 260px); line-height: .95; letter-spacing: -.03em; }
+.hire-link:hover { text-decoration: none !important; }
+.hire-link span { font-size: .5em; vertical-align: top; display: inline-block; transition: transform .3s ease; }
+.hire-link:hover span { transform: translate(.1em, -.1em); }
+.legal { display: flex; justify-content: space-between; gap: 2vw; font-size: var(--small); padding-top: 1.2vw; border-top: 1px solid #000; }
+.legal nav { display: flex; gap: 1.8em; }
+
+@media (max-width: 720px) {
+  :root { --gutter: 18px; --small: 13px; }
+  .site-head { padding: 18px; }
+  .row { grid-template-columns: 1fr auto; padding: 18px 0; gap: 6px 12px; }
+  .brand { grid-column: 1 / -1; font-size: 30px; }
+  .cols { grid-template-columns: 1fr; gap: 28px; }
+  .statement { font-size: 28px; }
+  .stats, .cv-cols { grid-template-columns: 1fr; gap: 28px; }
+  .stats b { font-size: 48px; }
+  .legal { flex-wrap: wrap; gap: 12px 24px; padding-top: 14px; }
+}
+
+/* Reduced motion: no zoom. The content simply follows the logo as an ordinary page. */
+.reduced .scroll-space, .reduced .bg { display: none; }
+.reduced .flow-mask { position: relative; inset: auto; opacity: 1; pointer-events: auto; margin-top: 100vh; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+.reduced .stage { position: absolute; height: 100vh; }
+.reduced .work, .reduced .flow-mask { background: var(--sky); }
+.reduced .about, .reduced .foot { background: var(--blush); }
+.reduced .flow { padding-inline: 0; }
+.reduced .flow > section, .reduced .flow > footer { padding-inline: var(--gutter); }
