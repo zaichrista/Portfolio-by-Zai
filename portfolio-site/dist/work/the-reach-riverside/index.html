@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="My work with The Reach Riverside spans brand development, creative direction, digital design and marketing strategy, focusing on establishing a distinct visual identity and strengthening the restaurant's positioning within London's hospitality market.">
+  <title>The Reach Riverside — Zaira Christa</title>
+  <link rel="stylesheet" href="../../project.css">
+  <script>
+    // Inside the transition preview (an iframe) the content rises in quickly; after a transition the real page skips its entrance.
+    if (window.top !== window) document.documentElement.classList.add('in-iris');
+    else try { if (sessionStorage.getItem('zc-iris')) { document.documentElement.classList.add('no-enter'); sessionStorage.removeItem('zc-iris'); } } catch (e) {}
+  </script>
+</head>
+<body>
+<header class="site-head">
+  <a class="brand-mark" href="../../index.html" aria-label="zaira christa, home"><svg class="zc" viewBox="556 384 886 482" aria-hidden="true">
+      <defs><mask id="gap2" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="650"><rect x="900" y="300" width="600" height="650" fill="#fff"/><rect x="1360" y="596.5" width="120" height="56" fill="#000"/></mask></defs>
+      <polygon fill="#000" points="592,395 881,395 651,801 889,801 889,854 562,854 790,449 592,449"/>
+      <g id="ring2"><circle cx="1197" cy="624.5" r="211" fill="none" stroke="#000" stroke-width="56" mask="url(#gap2)"/></g>
+    </svg></a>
+  <nav aria-label="Main navigation"><a href="../../index.html">home</a><span aria-hidden="true">,</span><a href="../../index.html#work">work</a><span aria-hidden="true">,</span><a href="../../index.html#about">about</a><span aria-hidden="true">,</span><a href="../../index.html#cv">CV</a></nav>
+</header>
+<div class="pages">
+<main class="project">
+  <section class="info" aria-labelledby="title">
+    <a class="back" href="../../index.html#work">← all work</a>
+    <h1 id="title">THE REACH RIVERSIDE</h1>
+    <p class="tags">Brand Strategy · Digital Design · Marketing · Hospitality</p>
+    <dl class="facts">
+      <div><dt>Role</dt><dd>Lead brand designer + strategist</dd></div>
+      <div><dt>Website</dt><dd>thereachriverside.com</dd></div>
+    </dl>
+    <p>My work with The Reach Riverside spans brand development, creative direction, digital design and marketing strategy, focusing on establishing a distinct visual identity and strengthening the restaurant's positioning within London's hospitality market.</p>
+    <p>I designed and developed the restaurant's new website, created brand communications and digital campaigns, and developed creative concepts to support footfall, seasonal promotions and private events. My responsibilities also extend into operational systems, including EPOS configuration, CMS setup and maintenance, inventory management and service workflows, connecting creative strategy with commercial and operational needs.</p>
+    <a class="visit" href="https://thereachriverside.com" target="_blank" rel="noopener">View full website ↗</a>
+  </section>
+
+  <div class="browser">
+    <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="url">thereachriverside.com</span></div>
+    <div class="viewport">
+      <!-- A live preview only. The sandbox stops anything inside it sending the visitor away; "View full website" is the only way out. -->
+      <iframe src="https://zaichrista.github.io/Reach-Riverside-site/" title="Preview of The Reach Riverside" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
+    </div>
+  </div>
+</main>
+</div>
+
+<nav class="more" aria-label="Projects">
+  <a class="arrow" href="../zc-studios/" data-slide data-dir="prev" aria-label="Previous project: Zc Studios">←</a>
+  <div class="tiles">
+      <!-- logos live in logos/*.png; the current project is full strength, the others are dimmed -->
+      <a class="tile" href="../the-reach-riverside/" data-slide data-dir="prev" aria-current="page" aria-label="The Reach Riverside"><span class="logo" style="--logo: url(../../logos/the-reach-riverside.png)"></span></a>
+      <a class="tile" href="../the-reach-catering/" data-slide data-dir="next" aria-label="The Reach Catering"><span class="logo" style="--logo: url(../../logos/the-reach-catering.png)"></span></a>
+      <a class="tile" href="../mandaloun/" data-slide data-dir="next" aria-label="Mandaloun"><span class="logo" style="--logo: url(../../logos/mandaloun.png)"></span></a>
+      <a class="tile" href="../zc-studios/" data-slide data-dir="next" aria-label="Zc Studios"><span class="logo" style="--logo: url(../../logos/zc-studios.png)"></span></a>
+  </div>
+  <a class="arrow" href="../the-reach-catering/" data-slide data-dir="next" aria-label="Next project: The Reach Catering">→</a>
+</nav>
+<script src="../../project.js"></script>
+<script src="../../transition.js"></script>
+</body>
+</html>

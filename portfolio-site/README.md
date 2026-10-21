@@ -1,17 +1,13 @@
-# Zai — Web Design Portfolio
+# Zaira Christa — Portfolio
 
-A lightweight static portfolio skeleton with a home page, work index, CV, and four project case studies.
+A static portfolio site: plain HTML and CSS with a little JavaScript, no build step.
 
 ## Pages
 
-- `dist/index.html` — home page and the one-page scroll: logo zoom → work list (blue) → about (blush) → footer. Nav links for home/about/work scroll within it; `work.html` and `about.html` remain as fallbacks
-- `dist/work.html` — four selected projects
-- `dist/about.html` — an introduction to the designer and their practice
-- `dist/cv.html` — experience, education, skills, and contact
-- `dist/work/project-01/` through `project-04/` — shared case study template
+- `dist/index.html` — the whole home experience in one scroll: logo and C zoom → work list (blue) → about (blush) → CV (orange) → hire me footer (green). Styles in `dist/home.css`.
+- `dist/work/<project>/index.html` — one page per project (`the-reach-riverside`, `the-reach-catering`, `mandaloun`, `zc-studios`). Styles in `dist/project.css`, preview scaling and the turning ZC mark in `dist/project.js`. Each has a strip of all four projects at the bottom with previous/next arrows.
+- `dist/transition.js` — page transitions: the C grows from the click point between projects (links marked `data-iris`), and the project strip drops away when leaving for the main page.
 
-## Personalise it
+## Filling in the project pages
 
-Replace the bracketed prompts and sample project names/details in the HTML. Add project images to `dist/assets/` and update each case study's image placeholders. Edit the shared look and responsive layout in `dist/styles.css`.
-
-This project uses plain HTML and CSS, so it does not need a build step.
+Each project page embeds a sandboxed live preview (an iframe of the GitHub Pages build) while "View full website" goes to the official domain. Year is not shown until it's supplied. The bottom strip's tiles show the project names until you swap in each logo (look for the comment above the tiles).

@@ -14,7 +14,11 @@
 </head>
 <body>
   <header class="site-head">
-    <a href="index.html" data-go="home">zaira<br>christa</a>
+    <a class="brand-mark" href="index.html" data-go="home" aria-label="zaira christa, home"><span class="txt">zaira<br>christa</span><svg class="zc" viewBox="556 384 886 482" aria-hidden="true">
+      <defs><mask id="gap2" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="650"><rect x="900" y="300" width="600" height="650" fill="#fff"/><rect x="1360" y="596.5" width="120" height="56" fill="#000"/></mask></defs>
+      <polygon fill="#000" points="592,395 881,395 651,801 889,801 889,854 562,854 790,449 592,449"/>
+      <g id="ring2"><circle cx="1197" cy="624.5" r="211" fill="none" stroke="#000" stroke-width="56" mask="url(#gap2)"/></g>
+    </svg></a>
     <nav aria-label="Main navigation"><a href="index.html" data-go="home">home</a><span aria-hidden="true">,</span><a href="index.html#work" data-go="work">work</a><span aria-hidden="true">,</span><a href="index.html#about" data-go="about">about</a><span aria-hidden="true">,</span><a href="index.html#cv" data-go="cv">CV</a></nav>
   </header>
 
@@ -26,7 +30,7 @@
       <defs>
         <mask id="gap" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="650">
           <rect x="900" y="300" width="600" height="650" fill="#fff"/>
-          <rect x="1360" y="604" width="120" height="40" fill="#000"/>
+          <rect x="1360" y="596.5" width="120" height="56" fill="#000"/>
         </mask>
       </defs>
       <g id="zfade"><polygon class="z" fill="#000" points="592,395 881,395 651,801 889,801 889,854 562,854 790,449 592,449"/></g>
@@ -43,10 +47,10 @@
       <section class="work" id="work" aria-labelledby="work-h">
         <h2 class="label" id="work-h">work <span>(04)</span></h2>
         <ol class="rows">
-      <li><a class="row" href="work/project-01/"><span class="brand">THE REACH RIVERSIDE</span><span class="role">Lead brand designer + strategist</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
-      <li><a class="row" href="work/project-02/"><span class="brand">THE REACH CATERING</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
-      <li><a class="row" href="work/project-03/"><span class="brand">MANDALOUN</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
-      <li><a class="row" href="work/project-04/"><span class="brand">ZC STUDIOS</span><span class="role">Founder + creative lead</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="work/the-reach-riverside/" data-iris data-logo="logos/the-reach-riverside.png"><span class="brand">THE REACH RIVERSIDE</span><span class="role">Lead brand designer + strategist</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="work/the-reach-catering/" data-iris data-logo="logos/the-reach-catering.png"><span class="brand">THE REACH CATERING</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="work/mandaloun/" data-iris data-logo="logos/mandaloun.png"><span class="brand">MANDALOUN</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="work/zc-studios/" data-iris data-logo="logos/zc-studios.png"><span class="brand">ZC STUDIOS</span><span class="role">Founder + creative lead</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
         </ol>
       </section>
 
@@ -150,6 +154,10 @@
       var about = document.getElementById('about');
       var cv = document.getElementById('cv');
       var foot = document.querySelector('.foot');
+      var head = document.querySelector('.site-head');
+      var nameTxt = head.querySelector('.txt');
+      var ring2 = document.getElementById('ring2');
+      var nameX, nameY;
       var spacer = document.getElementById('spacer');
       var lastMove = performance.now(), hintShown = false;
       var unit, maxScale, vh, zoomDone, zoomEnd, aboutTop, cvTop, footTop, aboutHold;
@@ -164,6 +172,8 @@
         aboutTop = about.offsetTop;
         cvTop = cv.offsetTop;
         footTop = foot.offsetTop;
+        var nb = nameTxt.getBoundingClientRect();   // where the name sits, so we know when the C's ring is over it
+        nameX = nb.left + nb.width / 2; nameY = nb.top + nb.height / 2;
         aboutHold = vh * ABOUT_HOLD_VH;
         // last scroll position puts the bottom of the footer at the bottom of the window
         spacer.style.height = (zoomEnd + aboutHold + flow.offsetHeight) + 'px';
@@ -248,6 +258,11 @@
         // The colour layer and the work column are clipped to the C's blue circle, so the rows are already in
         // place while it opens, and going home they stay put at full strength and only leave as the blue does.
         var r = disc.getBoundingClientRect();
+        // The name in the corner becomes the small ZC mark while the black of the C is over it, so the swap is
+        // hidden. It turns the same way the big C does: anti-clockwise going down, clockwise coming back up.
+        var midR = r.width / 2 * 211 / 185;   // radius of the middle of the ring
+        head.classList.toggle('swapped', Math.hypot(r.left + r.width / 2 - nameX, r.top + r.height / 2 - nameY) <= midR);
+        ring2.setAttribute('transform', 'rotate(' + (-current * DEG_PER_PX) + ' ' + CX + ' ' + CY + ')');
         var clip = 'circle(' + (r.width / 2 * C_INNER_R / 185) + 'px at ' + (r.left + r.width / 2) + 'px ' + (r.top + r.height / 2) + 'px)';
         // Opening: the rows fade in once the disc is fully blue (p = .6). Going home they stay full strength
         // and only go as the blue goes.
@@ -317,5 +332,7 @@
     requestAnimationFrame(tick);
   })();
   </script>
+  <script src="transition.js"></script>
+  <script src="cursor.js"></script>
 </body>
 </html>
