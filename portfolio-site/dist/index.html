@@ -15,7 +15,7 @@
 <body>
   <header class="site-head">
     <a href="index.html" data-go="home">zaira<br>christa</a>
-    <nav aria-label="Main navigation"><a href="index.html" data-go="home">home</a><span aria-hidden="true">,</span><a href="work.html" data-go="work">work</a><span aria-hidden="true">,</span><a href="about.html" data-go="about">about</a><span aria-hidden="true">,</span><a href="cv.html" data-go="cv">CV</a></nav>
+    <nav aria-label="Main navigation"><a href="index.html" data-go="home">home</a><span aria-hidden="true">,</span><a href="index.html#work" data-go="work">work</a><span aria-hidden="true">,</span><a href="index.html#about" data-go="about">about</a><span aria-hidden="true">,</span><a href="index.html#cv" data-go="cv">CV</a></nav>
   </header>
 
   <p class="hint" id="hint" aria-hidden="true">(keep going)</p>
@@ -108,8 +108,7 @@
 
         <div class="legal">
           <span>© 2026 Zaira Christa</span>
-          <nav aria-label="Legal"><a href="#">Cookies</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Accessibility</a></nav>
-          <nav aria-label="Elsewhere"><a href="mailto:zcbarakat@gmail.com">Email</a><a href="https://linkedin.com/in/zairachrista">LinkedIn</a><a href="#">Instagram</a></nav>
+          <nav aria-label="Elsewhere"><a href="https://linkedin.com/in/zairachrista">LinkedIn</a></nav>
         </div>
       </footer>
     </div>
@@ -203,12 +202,16 @@
       mask.addEventListener('scroll', function () { mask.scrollTop = 0; });
       mask.addEventListener('focusin', function (e) {
         mask.scrollTop = 0;
+        if (!e.target.matches(':focus-visible')) return;   // a mouse click on a link must open it, not scroll first
         var shift = toShift(Math.max(0, window.scrollY - zoomEnd));
         var top = e.target.getBoundingClientRect().top + shift;
         go(zoomEnd + toRaw(Math.max(0, top - vh * .4)), false);
       });
 
       var current = 0;
+      // Arriving from another page (e.g. index.html#cv): start at that section.
+      var jump = { '#work': zoomEnd, '#about': zoomEnd + aboutTop, '#cv': zoomEnd + toRaw(cvTop) }[location.hash];
+      if (jump !== undefined) { window.scrollTo(0, jump); current = jump; }
       (function frame(now) {
         var y, p, shift, homing = false, e = 0;
         if (drive) {
