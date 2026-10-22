@@ -13,7 +13,7 @@ a:hover { text-decoration-thickness: 2px; }
 .site-head nav { display: flex; gap: 2.2em; padding-top: .25em; }
 .site-head nav a:hover { text-decoration: underline; }
 
-.project { flex: 1; display: grid; grid-template-columns: minmax(0, 4.8fr) minmax(0, 7.2fr); column-gap: 3vw; align-content: start; padding: 3vh var(--gutter) 24vh; font-size: var(--small); line-height: 1.6; }
+.project { flex: 1; display: grid; grid-template-columns: minmax(0, 4.8fr) minmax(0, 7.2fr); column-gap: 3vw; align-content: start; padding: 3vh var(--gutter) 2vh; font-size: var(--small); line-height: 1.6; }
 /* Left column: all the text, which scrolls. Right column: the website preview, which stays where it is. */
 .info { display: contents; }
 .head { grid-column: 1; grid-row: 1; }
@@ -118,5 +118,5 @@ a:hover { text-decoration-thickness: 2px; }
   .head { position: static; grid-column: 1; grid-row: auto; }
   .blurb, .case, .browser { grid-column: 1; grid-row: auto; margin-top: 4vh; }
   .head { order: 1; } .case { order: 2; } .blurb { order: 3; } .browser { order: 4; position: relative; }
-  .project { padding-bottom: 14vh; }
+  .project { padding-bottom: 2vh; }
 }

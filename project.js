@@ -1,7 +1,21 @@
 // Scales each 1440px-wide site preview down to fit its frame.
 (function () {
   function top(el) { var y = 0; for (; el; el = el.offsetParent) y += el.offsetTop; return y; }
+  // Desktop: the preview sits in the vertical middle of the window, at the top of the page and while it stays pinned.
+  function centre() {
+    document.querySelectorAll('.browser').forEach(function (b) {
+      b.style.marginTop = ''; b.style.top = '';
+      if (window.innerWidth <= 860) return;   // phones: the preview just follows the text
+      var want = Math.max(16, (window.innerHeight - b.offsetHeight) / 2);
+      b.style.position = 'static';             // measure where it would naturally sit, not where it is pinned
+      var natural = top(b);
+      b.style.position = '';
+      b.style.top = want + 'px';
+      b.style.marginTop = Math.max(0, want - natural) + 'px';
+    });
+  }
   function fit() {
+    centre();
     document.querySelectorAll('.viewport').forEach(function (v) {
       var f = v.querySelector('iframe');
       if (f) f.style.transform = 'scale(' + (v.clientWidth / 1440) + ')';
