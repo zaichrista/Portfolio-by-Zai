@@ -186,7 +186,7 @@ a { color: inherit; text-decoration: none; }
 .lite .lockup-wrap { will-change: transform; }
 .lite .scroll-space { display: none; }
 .lite .bg { position: fixed; inset: 0; z-index: 0; opacity: 0; }
-.lite .flow-mask { position: relative; inset: auto; z-index: 1; margin-top: 0; opacity: 1; pointer-events: auto; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+.lite .flow-mask { position: relative; inset: auto; z-index: 1; margin-top: -100vh; margin-top: -100svh; opacity: 1; pointer-events: auto; overflow: visible; -webkit-mask-image: none; mask-image: none; }
 .lite .work { padding-top: 6vh; }
 
 /* Portrait: fills the whole right side of the about section, edge to edge */

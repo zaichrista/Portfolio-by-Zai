@@ -117,6 +117,6 @@ a:hover { text-decoration-thickness: 2px; }
   .project { grid-template-columns: 1fr; row-gap: 2vh; }
   .head { position: static; grid-column: 1; grid-row: auto; }
   .blurb, .case, .browser { grid-column: 1; grid-row: auto; margin-top: 4vh; }
-  .head { order: 1; } .case { order: 2; } .blurb { order: 3; } .browser { order: 4; position: relative; }
-  .project { padding-bottom: 2vh; }
+  .head { order: 1; } .case { order: 2; } .blurb { order: 3; } .browser { order: 4; position: relative; top: auto; }   /* top: auto cancels the desktop pin offset, which was pushing it down past the page end */
+  .project { padding-bottom: 4vh; }
 }

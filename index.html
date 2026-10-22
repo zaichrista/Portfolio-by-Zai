@@ -433,7 +433,7 @@
     function initLite() {
       var wrap = document.querySelector('.lockup-wrap'), disc = document.getElementById('disc');
       var zfade = document.getElementById('zfade'), subfade = document.getElementById('subfade');
-      var bg = document.getElementById('bg'), stage = document.querySelector('.stage'), nudge = document.getElementById('nudge');
+      var bg = document.getElementById('bg'), stage = document.querySelector('.stage'), nudge = document.getElementById('nudge'), list = document.getElementById('flowMask');
       var sections = ['about', 'cv'].map(function (id) { return document.getElementById(id); }).concat(document.querySelector('.foot'));
       var SKY = [135, 206, 235], STOPS = [[247, 212, 214], [255, 214, 176], [208, 234, 200]];   // blush, orange, green
       var VIEW_W = 920, C_INNER_R = 183, C_OFFSET_X = 1197 - 1000;
@@ -446,7 +446,8 @@
       // the values, as functions of how far through the zoom we are (p) and of the scroll position (y)
       function zoomAt(p) {
         return { x: -C_OFFSET_X * unit * smooth(0, .55, p), s: Math.exp(Math.log(maxScale) * Math.pow(p, 1.7)),
-                 disc: smooth(.08, .6, p), text: 1 - smooth(0, .3, p) };
+                 disc: smooth(.08, .6, p), text: 1 - smooth(0, .3, p),
+                 list: smooth(.82, 1, p) };   // the work list is already in place under the C; it shows as the blue fills the window
       }
       function colourAt(y) {
         var col = SKY;
@@ -468,25 +469,27 @@
 
       // ---- scroll-driven animations ----
       function buildNative() {
-        var N = 40, zoom = '', dsc = '', fade = '', spin = '', i, p, pc, v;
+        var N = 40, zoom = '', dsc = '', fade = '', spin = '', work = '', i, p, pc, v;
         for (i = 0; i <= N; i++) {
           p = i / N; pc = r2(p * 100) + '%'; v = zoomAt(p);
           zoom += pc + '{transform:translate(' + r2(v.x) + 'px,0) scale(' + v.s.toFixed(4) + ')}';
           dsc += pc + '{opacity:' + v.disc.toFixed(3) + '}';
           fade += pc + '{opacity:' + v.text.toFixed(3) + '}';
+          work += pc + '{opacity:' + v.list.toFixed(3) + ';visibility:' + (v.list > 0 ? 'visible' : 'hidden') + '}';
           spin += pc + '{transform:rotate(' + r2(-p * range * .1) + 'deg)}';
         }
         var step = Math.max(40, total / 110), back = '', y;
         for (y = 0; y < total + step; y += (y < range * 1.1 ? 20 : step)) {   // finer through the hero, where the colour comes in fastest
           var yy = Math.min(y, total);
-          back += r2(yy / total * 100) + '%{background-color:' + colourAt(yy) + ';opacity:' + smooth(.85, 1, clamp01(yy / range)).toFixed(3) + '}';
+          back += r2(yy / total * 100) + '%{background-color:' + colourAt(yy) + ';opacity:' + smooth(.8, .95, clamp01(yy / range)).toFixed(3) + '}';
           if (yy === total) break;
         }
         var tl = 'animation-timing-function:linear;animation-fill-mode:both;animation-timeline:scroll(root);';
-        var css = '@keyframes lz{' + zoom + '}@keyframes ld{' + dsc + '}@keyframes lf{' + fade + '}@keyframes lr{' + spin + '}@keyframes lb{' + back + '}' +
+        var css = '@keyframes lz{' + zoom + '}@keyframes ld{' + dsc + '}@keyframes lf{' + fade + '}@keyframes lr{' + spin + '}@keyframes lw{' + work + '}@keyframes lb{' + back + '}' +
           '.lite .lockup-wrap{animation-name:lz;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
           '.lite #disc{animation-name:ld;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
           '.lite #zfade,.lite #subfade{animation-name:lf;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
+          '.lite .flow-mask{animation-name:lw;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
           '.lite #ring{transform-origin:1197px 624.5px;animation-name:lr;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
           '.lite .bg{animation-name:lb;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(total) + 'px}';
         if (!styleEl) { styleEl = document.createElement('style'); document.head.appendChild(styleEl); }
@@ -503,7 +506,8 @@
         zfade.setAttribute('opacity', v.text); subfade.style.opacity = v.text;
         var css = colourAt(y);
         if (css !== lastCol) { bg.style.backgroundColor = css; lastCol = css; }
-        bg.style.opacity = smooth(.85, 1, p);
+        bg.style.opacity = smooth(.8, .95, p);
+        list.style.opacity = v.list; list.style.visibility = v.list > 0 ? 'visible' : 'hidden';
       }
       function request() { if (!ticking) { ticking = true; requestAnimationFrame(native ? hint : frame); } }
       function hint() { ticking = false; nudge.classList.toggle('show', window.scrollY < 8); }
