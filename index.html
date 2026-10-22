@@ -247,6 +247,8 @@
         window.addEventListener(n, function () { lastInput = performance.now(); }, { passive: true });
       });
 
+      window.addEventListener('zc-revealed', function () { lastInput = performance.now(); });   // the idle clock starts when the page appears, not while it loads
+
       function drawMelt(d) {
         // the bottom bar keeps its length and slides down the line of the diagonal, which is what lengthens
         var k = d * 229 / 405.5;

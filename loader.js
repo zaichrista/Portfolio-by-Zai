@@ -69,7 +69,7 @@
     root.classList.remove('loading');
     cover.classList.add('out');
     // measuring scripts ran against the hidden page; tell them to measure again now it is showing
-    try { window.dispatchEvent(new Event('resize')); } catch (e) {}
+    try { window.dispatchEvent(new Event('resize')); window.dispatchEvent(new Event('zc-revealed')); } catch (e) {}
     setTimeout(function () { cover.remove(); css.remove(); }, 600);
   }
 
