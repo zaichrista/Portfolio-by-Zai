@@ -13,11 +13,11 @@ a:hover { text-decoration-thickness: 2px; }
 .site-head nav { display: flex; gap: 2.2em; padding-top: .25em; }
 .site-head nav a:hover { text-decoration: underline; }
 
-.project { flex: 1; display: grid; grid-template-columns: minmax(0, 4.6fr) minmax(0, 7.4fr); column-gap: 3vw; align-content: start; padding: 3vh var(--gutter) 14vh; font-size: var(--small); line-height: 1.6; }
-/* Left column: the title block stays put. Right column: copy, project in short and the preview scroll past it. */
+.project { flex: 1; display: grid; grid-template-columns: minmax(0, 4.8fr) minmax(0, 7.2fr); column-gap: 3vw; align-content: start; padding: 3vh var(--gutter) 24vh; font-size: var(--small); line-height: 1.6; }
+/* Left column: all the text, which scrolls. Right column: the website preview, which stays where it is. */
 .info { display: contents; }
-.head { grid-column: 1; grid-row: 1 / span 3; position: sticky; top: 4vh; align-self: start; }
-.blurb { grid-column: 2; grid-row: 1; }
+.head { grid-column: 1; grid-row: 1; }
+.blurb { grid-column: 1; grid-row: 2; margin-top: 7vh; }
 .head .back { display: inline-block; margin-bottom: 3vh; }
 .head h1 { font-weight: 400; font-size: clamp(26px, min(3.6vw, 6vh), 84px); line-height: 1; letter-spacing: -.02em; margin: 0 0 .5em; overflow-wrap: anywhere; }
 .tags { margin: 0 0 2.2vh; font-weight: 500; }
@@ -29,8 +29,8 @@ a:hover { text-decoration-thickness: 2px; }
 .visit { display: inline-block; margin: .4em 0 2.4vh; padding: .6em 1.1em; border: 1px solid #000; text-decoration: none; transition: background .2s, color .2s; }
 .visit:hover { background: #000; color: var(--page); }
 
-/* Right column, below the project in short */
-.browser { grid-column: 2; grid-row: 3; position: relative; width: 100%; margin: 3.4vh 0 0; border: 1px solid #000; background: #fff; }
+/* pinned just below the top of the window, so it sits in the middle of the space above the project strip */
+.browser { grid-column: 2; grid-row: 1 / span 3; position: sticky; top: 11vh; align-self: start; width: 100%; margin: 0; border: 1px solid #000; background: #fff; }
 .browser .bar { display: flex; align-items: center; gap: .8em; padding: .6em .9em; border-bottom: 1px solid #000; font-size: var(--small); background: var(--page); }
 .browser .dots { display: flex; gap: .35em; }
 .browser .dots i { width: .75em; height: .75em; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .18); }
@@ -48,7 +48,6 @@ a:hover { text-decoration-thickness: 2px; }
   .site-head nav { gap: 1.2em; }
   .project { grid-template-columns: 1fr; row-gap: 2vh; }
   .head { position: static; grid-row: auto; }
-  .blurb, .case, .browser { grid-column: 1; grid-row: auto; }
   .head .back { margin-bottom: 4vh; }
 }
 
@@ -98,7 +97,7 @@ a:hover { text-decoration-thickness: 2px; }
 }
 
 /* The project in short: same column and type size as the paragraphs above it */
-.case { grid-column: 2; grid-row: 2; margin-top: 2.4vh; font-size: var(--body); line-height: 1.6; }
+.case { grid-column: 1; grid-row: 3; margin-top: 7vh; font-size: var(--body); line-height: 1.6; }
 .case-cols { display: grid; gap: .7em; margin: .7em 0 0; }
 .case-cols > div { display: grid; grid-template-columns: 9em minmax(0, 1fr); gap: 1em; }
 .case p { margin: 0; }
@@ -116,5 +115,7 @@ a:hover { text-decoration-thickness: 2px; }
 @media (max-width: 860px) {
   .project { grid-template-columns: 1fr; row-gap: 2vh; }
   .head { position: static; grid-column: 1; grid-row: auto; }
-  .blurb, .case, .browser { grid-column: 1; grid-row: auto; }
+  .blurb, .case, .browser { grid-column: 1; grid-row: auto; margin-top: 4vh; }
+  .browser { position: static; }
+  .project { padding-bottom: 14vh; }
 }
