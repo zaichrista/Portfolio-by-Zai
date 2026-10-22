@@ -65,6 +65,17 @@ a { color: inherit; text-decoration: none; }
 }
 .hint.show { opacity: 1; transition: opacity .6s ease; }
 
+/* Shown above the lockup after a while with no scrolling. */
+.nudge {
+  position: fixed; left: 0; right: 0; top: 10vh; z-index: 2; margin: 0; text-align: center;
+  font-family: var(--mono); font-size: clamp(14px, 1.15vw, 24px); letter-spacing: .02em;
+  opacity: 0; pointer-events: none;
+}
+.nudge.show { opacity: 1; transition: opacity 1.6s ease; }
+.nudge .or { display: block; opacity: 0; }   /* hides instantly on reset */
+.nudge.show .or { opacity: 1; transition: opacity 1.2s ease 1s; }
+.ch { display: inline-block; will-change: transform; }
+
 /* Real height is set in JS (zoom distance + content height); this is only the no-JS fallback. */
 .scroll-space { height: 400vh; }
 .loading, .loading body { overflow: hidden; }

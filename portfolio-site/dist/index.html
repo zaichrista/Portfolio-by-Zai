@@ -5,7 +5,7 @@
   <meta name="description" content="The portfolio of Zaira Christa, a web designer building thoughtful digital experiences.">
   <title>Zaira Christa — Web Designer</title>
   <link rel="preload" href="fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="home.css?v=3">
   <script>
     // The loader only runs the first time the site is opened in a tab; later visits to home skip it.
     try { if (!sessionStorage.getItem('zc-loaded')) document.documentElement.classList.add('loading'); } catch (e) { document.documentElement.classList.add('loading'); }
@@ -23,20 +23,21 @@
   </header>
 
   <p class="hint" id="hint" aria-hidden="true">(keep going)</p>
+  <p class="nudge" id="nudge" aria-hidden="true">(scroll)<span class="or">or don't :)</span></p>
 
   <main class="stage">
     <div class="lockup-wrap">
     <svg class="lockup" viewBox="540 345 920 560" role="img" aria-label="ZC">
       <defs>
-        <mask id="gap" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="650">
-          <rect x="900" y="300" width="600" height="650" fill="#fff"/>
+        <mask id="gap" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="8000">
+          <rect x="900" y="300" width="600" height="8000" fill="#fff"/>
           <rect x="1360" y="596.5" width="120" height="56" fill="#000"/>
         </mask>
       </defs>
       <g id="zfade"><polygon class="z" fill="#000" points="592,395 881,395 651,801 889,801 889,854 562,854 790,449 592,449"/></g>
       <text class="counter" id="counter" x="875" y="650" text-anchor="end" fill="#000">000%</text>
       <circle id="disc" cx="1197" cy="624.5" r="185" fill="#87ceeb" opacity="0"/>
-      <g id="ring"><circle cx="1197" cy="624.5" r="211" fill="none" stroke="#000" stroke-width="56" mask="url(#gap)"/></g>
+      <g id="ring"><path id="ringShape" d="M986 624.5A211 211 0 0 1 1408 624.5L1408 624.5A211 211 0 0 1 986 624.5Z" fill="none" stroke="#000" stroke-width="56" mask="url(#gap)"/></g>
     </svg>
     <div id="subfade"><p class="sub">web designer + brand strategist</p></div>
     </div>
@@ -160,6 +161,12 @@
       var nameX, nameY;
       var spacer = document.getElementById('spacer');
       var lastMove = performance.now(), hintShown = false;
+      var zPoly = document.querySelector('.lockup .z');
+      var ringShape = document.getElementById('ringShape');
+      var sub = document.querySelector('.sub');
+      var nudge = document.getElementById('nudge');
+      var lockup = document.querySelector('.lockup');
+      var meltMax = 0;
       var unit, maxScale, vh, zoomDone, zoomEnd, aboutTop, cvTop, footTop, aboutHold;
       var SKY = [135, 206, 235], BLUSH = [247, 212, 214], ORANGE = [255, 214, 176], GREEN = [208, 234, 200];
       function measure() {
@@ -175,6 +182,9 @@
         var nb = nameTxt.getBoundingClientRect();   // where the name sits, so we know when the C's ring is over it
         nameX = nb.left + nb.width / 2; nameY = nb.top + nb.height / 2;
         aboutHold = vh * ABOUT_HOLD_VH;
+        // how far the melt must run for the top of the Z's bottom bar (viewBox y 801) to leave the window
+        meltMax = Math.max(0, (vh * 1.5 - (vh - wrap.offsetHeight) / 2) / unit - (801 - 345));
+        nudge.style.top = Math.max(0, wrap.offsetTop - nudge.offsetHeight - vh * .04) + 'px';
         // last scroll position puts the bottom of the footer at the bottom of the window
         spacer.style.height = (zoomEnd + aboutHold + flow.offsetHeight) + 'px';
       }
@@ -219,11 +229,142 @@
       });
 
       var current = 0;
+
+      // Left alone at the top, the lockup melts: the Z's diagonal and the C both lengthen downwards and the
+      // subheading follows, until they run off the window. Still nothing after that and the letters of the
+      // hero text fall one by one. Any scroll or click puts everything back quickly.
+      var IDLE_MS = 5000;     // nothing happens for this long
+      var MELT_MS = 26000;    // then the melt runs this long, starting very slowly and speeding up
+      var NUDGE_AT = 16000;   // "(scroll)" appears above the lockup
+      var FALL_AT = 24000;    // the letters start to fall
+      var GRAVITY = 420, FALL_GAP = .14;
+      var lastInput = performance.now(), shown = 0, drawn = -1;
+      var split = [], letters = [], fallT = 0, fallK = 0, lastStep = 0, zPts = [];
+      var BOUNCE = .55, LETTER_R = 5;   // how lively the bounce is; a letter's radius in px
+      ['wheel', 'touchstart', 'keydown', 'pointerdown', 'click', 'scroll'].forEach(function (n) {
+        window.addEventListener(n, function () { lastInput = performance.now(); }, { passive: true });
+      });
+
+      function drawMelt(d) {
+        // the bottom bar keeps its length and slides down the line of the diagonal, which is what lengthens
+        var k = d * 229 / 405.5;
+        zPts = [[592, 395], [881, 395], [651 - k, 801 + d], [889 - k, 801 + d], [889 - k, 854 + d], [562 - k, 854 + d], [790, 449], [592, 449]];
+        zPoly.setAttribute('points', zPts.join(' '));
+        ringShape.setAttribute('d', 'M986 624.5A211 211 0 0 1 1408 624.5L1408 ' + (624.5 + d) + 'A211 211 0 0 1 986 ' + (624.5 + d) + 'Z');
+        sub.style.transform = d ? 'translateY(' + d * unit + 'px)' : '';
+        drawn = d;
+      }
+
+      function splitLetters() {
+        [head, sub, nudge].forEach(function (root) {
+          var walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+          while (walk.nextNode()) if (walk.currentNode.nodeValue.trim()) nodes.push(walk.currentNode);
+          nodes.forEach(function (n) {
+            var wrap = document.createElement('span');
+            n.nodeValue.split('').forEach(function (ch) {
+              if (/\s/.test(ch)) { wrap.appendChild(document.createTextNode(ch)); return; }
+              var s = document.createElement('span');
+              s.className = 'ch'; s.setAttribute('aria-hidden', 'true'); s.textContent = ch;
+              wrap.appendChild(s);
+              letters.push({ el: s, at: 0, live: false, x0: 0, y0: 0, x: 0, y: 0, vx: (Math.random() - .5) * 120, vy: 0, rot: 0, spin: (Math.random() - .5) * 120 });
+            });
+            n.parentNode.replaceChild(wrap, n);
+            split.push({ node: n, wrap: wrap });
+          });
+        });
+        // random order, so it reads as the text coming apart rather than being wiped
+        for (var i = letters.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = letters[i]; letters[i] = letters[j]; letters[j] = t; }
+        letters.forEach(function (l, i) {
+          l.at = i * FALL_GAP + Math.random() * .25;
+          var b = l.el.getBoundingClientRect();   // where it sits at rest; the fall is worked out from here
+          l.x0 = l.x = b.left + b.width / 2; l.y0 = l.y = b.top + b.height / 2;
+        });
+      }
+
+      // Push a point out of the Z and the C, which are shapes in the lockup's own units. Returns the unit
+      // normal to push along and how far, or null when it isn't touching.
+      function nearestOnSeg(px, py, a, b) {
+        var dx = b[0] - a[0], dy = b[1] - a[1], len = dx * dx + dy * dy;
+        var t = len ? clamp01(((px - a[0]) * dx + (py - a[1]) * dy) / len) : 0;
+        return [a[0] + dx * t, a[1] + dy * t];
+      }
+      function touchZ(px, py, r) {
+        var inside = false, best = 1e9, bq;
+        for (var i = 0, n = zPts.length; i < n; i++) {
+          var a = zPts[i], b = zPts[(i + 1) % n];
+          if ((a[1] > py) !== (b[1] > py) && px < (b[0] - a[0]) * (py - a[1]) / (b[1] - a[1]) + a[0]) inside = !inside;
+          var q = nearestOnSeg(px, py, a, b), dd = Math.hypot(px - q[0], py - q[1]);
+          if (dd < best) { best = dd; bq = q; }
+        }
+        if (!inside && best >= r) return null;
+        var dx = (inside ? bq[0] - px : px - bq[0]) / (best || 1), dy = (inside ? bq[1] - py : py - bq[1]) / (best || 1);
+        return { nx: dx, ny: dy, push: inside ? best + r : r - best };
+      }
+      function touchC(px, py, r) {
+        if (px >= 1360 && py >= 596.5 && py <= 652.5) return null;   // the gap in the C
+        var q = nearestOnSeg(px, py, [1197, 624.5], [1197, 624.5 + drawn]);
+        var dx = px - q[0], dy = py - q[1], dist = Math.hypot(dx, dy), sd = dist - 211;
+        if (!dist || Math.abs(sd) >= 28 + r) return null;
+        var s = sd >= 0 ? 1 : -1;
+        return { nx: s * dx / dist, ny: s * dy / dist, push: 28 + r - Math.abs(sd) };
+      }
+
+      // Falling letters are real little bodies: gravity, then they bounce off whichever of the Z and the C they hit.
+      function stepLetters(now) {
+        var dt = Math.min(.033, Math.max(0, (now - lastStep) / 1000)), steps = 3, h = dt / steps;
+        var box = lockup.getBoundingClientRect(), u = box.width / 920, r = LETTER_R / u;
+        for (var s = 0; s < steps; s++) letters.forEach(function (l) {
+          if (!l.live) { if (fallT >= l.at) l.live = true; else return; }
+          if (l.y > window.innerHeight + 80) return;
+          l.vy = Math.min(1100, l.vy + GRAVITY * h);
+          l.x += l.vx * h; l.y += l.vy * h; l.rot += l.spin * h;
+          var px = 540 + (l.x - box.left) / u, py = 345 + (l.y - box.top) / u;
+          [touchZ(px, py, r), touchC(px, py, r)].forEach(function (c) {
+            if (!c) return;
+            l.x += c.nx * c.push * u; l.y += c.ny * c.push * u;
+            px += c.nx * c.push; py += c.ny * c.push;
+            var vn = l.vx * c.nx + l.vy * c.ny;
+            if (vn >= 0) return;
+            var bounce = vn < -40 ? 1 + BOUNCE : 1;   // slow ones just settle instead of jittering
+            l.vx = (l.vx - bounce * vn * c.nx) * .97; l.vy = (l.vy - bounce * vn * c.ny) * .97;
+            l.spin = Math.max(-400, Math.min(400, (l.vx * c.ny - l.vy * c.nx) * .6));
+          });
+        });
+      }
+      function joinLetters() {
+        split.forEach(function (s) { s.wrap.parentNode.replaceChild(s.node, s.wrap); });
+        split = []; letters = [];
+      }
+
+      function idleStep(now, y) {
+        if (drive || y > 1 || current > 1 || document.hidden) lastInput = now;
+        var t = now - lastInput;
+        var target = meltMax * Math.pow(clamp01((t - IDLE_MS) / MELT_MS), 2.2);
+        if (target >= shown) shown = target;
+        else { shown += (target - shown) * .25; if (shown - target < .3) shown = target; }
+        if (shown !== drawn) drawMelt(shown);
+        nudge.classList.toggle('show', t > NUDGE_AT);
+
+        if (t > FALL_AT) {
+          if (!split.length) { splitLetters(); lastStep = now; }
+          fallT = (t - FALL_AT) / 1000; fallK = 1;
+          stepLetters(now);
+        } else if (split.length) {
+          fallK *= .78;     // put back: wherever they got to, they fly home together
+          if (fallK < .01) { joinLetters(); return; }
+        } else return;
+        lastStep = now;
+        letters.forEach(function (l) {
+          l.el.style.transform = l.live ? 'translate(' + (l.x - l.x0) * fallK + 'px,' + (l.y - l.y0) * fallK + 'px) rotate(' + l.rot * fallK + 'deg)' : '';
+        });
+      }
+
       // Arriving from another page (e.g. index.html#cv): start at that section.
       var jump = { '#work': zoomEnd, '#about': zoomEnd + aboutTop, '#cv': zoomEnd + toRaw(cvTop) }[location.hash];
       if (jump !== undefined) { window.scrollTo(0, jump); current = jump; }
       (function frame(now) {
         var y, p, shift, homing = false, e = 0;
+        idleStep(now, window.scrollY);
         if (drive) {
           var t = clamp01((now - drive.t0) / drive.dur);
           e = ease(t);
