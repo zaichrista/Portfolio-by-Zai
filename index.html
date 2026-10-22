@@ -446,7 +446,8 @@
       // the values, as functions of how far through the zoom we are (p) and of the scroll position (y)
       function zoomAt(p) {
         return { x: -C_OFFSET_X * unit * smooth(0, .55, p), s: Math.exp(Math.log(maxScale) * Math.pow(p, 1.7)),
-                 disc: smooth(.08, .6, p), text: 1 - smooth(0, .3, p),
+                 // the blue disc hands over to the page colour at the end, so it can't sit on top of the fades that follow
+                 disc: smooth(.08, .6, p) * (1 - smooth(.95, 1, p)), text: 1 - smooth(0, .3, p),
                  list: smooth(.82, 1, p) };   // the work list is already in place under the C; it shows as the blue fills the window
       }
       function colourAt(y) {
