@@ -31,8 +31,7 @@ a:hover { text-decoration-thickness: 2px; }
 
 /* pinned just below the top of the window, so it sits in the middle of the space above the project strip */
 .browser { grid-column: 2; grid-row: 1 / span 3; position: sticky; top: 11vh; align-self: start; width: 100%; margin: 0; border: 1px solid #000; background: #fff; }
-/* The bar floats over the top of the site and blurs what is behind it */
-.browser .bar { position: absolute; inset: 0 0 auto 0; z-index: 2; display: flex; align-items: center; gap: .8em; padding: .6em .9em; border-bottom: 1px solid rgba(0, 0, 0, .22); font-size: var(--small); background: rgba(244, 238, 221, .5); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3); }
+.browser .bar { display: flex; align-items: center; gap: .8em; padding: .6em .9em; border-bottom: 1px solid #000; font-size: var(--small); background: var(--page); }
 .browser .dots { display: flex; gap: .35em; }
 .browser .dots i { width: .75em; height: .75em; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .18); }
 .browser .dots i:nth-child(1) { background: #ff5f57; }
@@ -57,7 +56,8 @@ a:hover { text-decoration-thickness: 2px; }
 .brand-mark .zc { display: block; height: 2.4em; width: auto; overflow: visible; }
 
 /* Project strip: all four projects, arrows at either edge of the page */
-.more { position: sticky; bottom: 0; z-index: 5; background: var(--page); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2vw; padding: 1.4vh var(--gutter) var(--gutter); }
+/* translucent: the page blurs as it scrolls underneath */
+.more { position: sticky; bottom: 0; z-index: 5; background: rgba(244, 238, 221, .55); -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2vw; padding: 1.4vh var(--gutter) var(--gutter); }
 .arrow { font-size: clamp(30px, 3.4vw, 64px); line-height: 1; text-decoration: none; padding: .1em .25em; transition: transform .25s ease; }
 .arrow:first-child:hover { transform: translateX(-.15em); }
 .arrow:last-child:hover { transform: translateX(.15em); }
