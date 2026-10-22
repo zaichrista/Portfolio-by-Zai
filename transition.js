@@ -26,13 +26,21 @@
     var loadedAt = null, animDone = false, leaving = false;
     busy = true;   // ignore further clicks while this plays
 
-    var page = document.createElement('iframe');
-    page.className = 'zc-iris-page';
-    page.setAttribute('aria-hidden', 'true'); page.tabIndex = -1;
+    // Usually the page was already loaded in the background when the pointer reached the link (see warm), so the
+    // animation doesn't have to share the main thread with parsing and laying out the next page.
+    var page = warmed && warmed.href === a.href ? warmed.frame : null; warmed = null;
+    var fresh = !page;
+    if (fresh) {
+      page = document.createElement('iframe');
+      page.className = 'zc-iris-page';
+      page.setAttribute('aria-hidden', 'true'); page.tabIndex = -1;
+      page.src = a.href;
+      document.body.appendChild(page);
+    }
     page.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0;z-index:9998;pointer-events:none;clip-path:circle(' + R_IN * .02 + 'px at ' + x + 'px ' + y + 'px)';
+    // the entrance of a page that loaded in the background has already played unseen: play it again as the ring opens
+    if (!fresh) { try { page.contentDocument.getAnimations().forEach(function (an) { an.currentTime = 0; an.play(); }); } catch (er) {} }
     whenReady(page, function () { loadedAt = performance.now(); finish(); });
-    page.src = a.href;
-    document.body.appendChild(page);
 
     var ring = document.createElement('div');
     ring.className = 'zc-iris';
@@ -71,6 +79,24 @@
       requestAnimationFrame(poll);   // not attached or still loading: check again next frame
     })();
   }
+
+  // Load the next page in its iframe as soon as the pointer is over a link (or a finger touches it), so by the time of
+  // the click it is ready and nothing heavy happens while the ring is growing. Only one at a time.
+  var warmed = null;
+  function warm(e) {
+    if (LIGHT || busy) return;
+    var a = e.target.closest && e.target.closest('a[data-iris]');
+    if (!a || (warmed && warmed.href === a.href)) return;
+    if (warmed) warmed.frame.remove();
+    var f = document.createElement('iframe');
+    f.className = 'zc-iris-page';
+    f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
+    f.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0;z-index:9998;pointer-events:none;clip-path:circle(0px at 0 0);visibility:hidden';
+    f.src = a.href;
+    document.body.appendChild(f);
+    warmed = { href: a.href, frame: f };
+  }
+  document.addEventListener('pointerover', warm, { passive: true });
 
   // Warm the cache for the pages a visitor is likely to open next.
   function prefetch() {
@@ -274,7 +300,7 @@
   // Coming back with the browser's back button can restore the page mid-transition.
   window.addEventListener('pageshow', function (e) {
     if (!e.persisted) return;
-    busy = false;
+    busy = false; warmed = null;
     document.querySelectorAll('.zc-iris, .zc-iris-page').forEach(function (n) { n.remove(); });
   });
 })();

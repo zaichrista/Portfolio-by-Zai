@@ -72,7 +72,8 @@ a { color: inherit; text-decoration: none; }
 /* Work, about and footer live in one tall column inside a fixed window; JS slides it up as you scroll.
    The bg sits behind it and takes over from the C's blue disc once the disc fills the window. */
 .bg, .flow-mask { position: fixed; inset: 0; z-index: 1; opacity: 0; pointer-events: none; }
-.flow-mask { overflow: hidden; -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 5vh, #000 12vh); mask-image: linear-gradient(to bottom, transparent 0, transparent 5vh, #000 12vh); }
+.flow-mask { overflow: hidden; }
+.flow-mask.masked { -webkit-mask-image: linear-gradient(to bottom, transparent 0, transparent 5vh, #000 12vh); mask-image: linear-gradient(to bottom, transparent 0, transparent 5vh, #000 12vh); }
 .flow { position: relative; will-change: transform; padding-inline: var(--gutter); }
 .flow a:hover { text-decoration: underline; text-underline-offset: .25em; }
 .label { margin: 0; font-weight: 700; font-size: var(--small); }

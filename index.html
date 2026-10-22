@@ -13,7 +13,7 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Zaira Christa", "url": "https://www.zairachrista.com/"}</script>
   <title>Zaira Christa — Brand-led Web Designer and Strategist</title>
   <link rel="preload" href="fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=8">
+  <link rel="stylesheet" href="home.css?v=9">
   <script>
     // Reduced motion gets a plain page. Phones and tablets get a light version of the scroll animation (see initLite).
     try {
@@ -42,8 +42,8 @@
     <div class="lockup-wrap">
     <svg class="lockup" viewBox="540 345 920 560" role="img" aria-label="ZC">
       <defs>
-        <mask id="gap" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="8000">
-          <rect x="900" y="300" width="600" height="8000" fill="#fff"/>
+        <mask id="gap" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="650">
+          <rect id="gapRect" x="900" y="300" width="600" height="650" fill="#fff"/>
           <rect x="1360" y="596.5" width="120" height="56" fill="#000"/>
         </mask>
       </defs>
@@ -150,7 +150,7 @@
 
     // Scrolling turns the C anti-clockwise and carries us through it: the C moves to the middle of the
     // window and grows, its centre fades to sky blue, and the blue ends up filling the whole window.
-    var DEG_PER_PX = 0.1, FOLLOW = 0.08;
+    var DEG_PER_PX = 0.1, FOLLOW = 0.14;   // FOLLOW: share of the gap to the scroll position closed each 60Hz frame (lower = floatier)
     var HINT_IDLE_MS = 900;              // how long scrolling must stop before "(keep going)" appears
     var RANGE_VH = 1.5;                  // scroll distance (in window heights) over which the zoom plays
     var ABOUT_HOLD_VH = 0;               // extra scrolling the about section stays centred for (0 = not sticky)
@@ -176,7 +176,8 @@
       var head = document.querySelector('.site-head');
       var nameTxt = head.querySelector('.txt');
       var ring2 = document.getElementById('ring2');
-      var nameX, nameY;
+      var nameX, nameY, baseCx, baseCy;   // baseCx/Cy: where the C's centre sits in the window before the zoom moves it
+      var stage = document.querySelector('.stage');
       var spacer = document.getElementById('spacer');
       var lastMove = performance.now(), hintShown = false;
       var zPoly = document.querySelector('.lockup .z');
@@ -203,6 +204,10 @@
         var nb = nameTxt.getBoundingClientRect();   // where the name sits, so we know when the C's ring is over it
         nameX = nb.left + nb.width / 2; nameY = nb.top + nb.height / 2;
         aboutHold = vh * ABOUT_HOLD_VH;
+        // the stage centres the lockup, and the disc's centre is the lockup's transform origin, so scaling never moves it:
+        // working this out here means the frame loop never has to measure the DOM
+        baseCx = (stage.clientWidth - wrap.offsetWidth) / 2 + wrap.offsetWidth * (1197 - 540) / VIEW_W;
+        baseCy = (stage.clientHeight - wrap.offsetHeight) / 2 + wrap.offsetHeight * (624.5 - 345) / 560;
         // how far the melt must run for the top of the Z's bottom bar (viewBox y 801) to leave the window
         meltMax = Math.max(0, (vh * 1.5 - (vh - wrap.offsetHeight) / 2) / unit - (801 - 345));
         nudge.style.top = Math.max(0, wrap.offsetTop - nudge.offsetHeight - vh * .04) + 'px';
@@ -274,7 +279,10 @@
 
       window.addEventListener('zc-revealed', function () { lastInput = performance.now(); });   // the idle clock starts when the page appears, not while it loads
 
+      var gapMask = document.getElementById('gap'), gapRect = document.getElementById('gapRect');
       function drawMelt(d) {
+        // the mask only needs to cover the ring as it is now; a 8000-unit-tall mask scaled up with the zoom is a huge offscreen surface
+        gapMask.setAttribute('height', 650 + d); gapRect.setAttribute('height', 650 + d);
         // the bottom bar keeps its length and slides down the line of the diagonal, which is what lengthens
         var k = d * 229 / 405.5;
         zPts = [[592, 395], [881, 395], [651 - k, 801 + d], [889 - k, 801 + d], [889 - k, 854 + d], [562 - k, 854 + d], [790, 449], [592, 449]];
@@ -392,7 +400,11 @@
       var jump = { '#work': zoomEnd, '#research': panEnd, '#about': panEnd + aboutTop, '#cv': panEnd + toRaw(cvTop) }[location.hash];
       if (jump !== undefined) { window.scrollTo(0, jump); current = jump; }
       else current = Math.max(0, Math.min(maxY, window.scrollY));
-      var lastFrame = performance.now(), isOpen = false;
+      var lastFrame = performance.now();
+      // Every write goes through put(), which skips it when the value hasn't changed, so a frame where nothing moved
+      // costs the browser no style, layout or paint work.
+      var cache = {};
+      function put(k, v, fn) { if (cache[k] !== v) { cache[k] = v; fn(v); } }
       (function frame(now) {
         var y, p, shift, pan, homing = false, e = 0;
         idleStep(now, window.scrollY);
@@ -421,27 +433,33 @@
         else if (!hintShown && performance.now() - lastMove > HINT_IDLE_MS) hintShown = true;
         hint.classList.toggle('show', hintShown);
 
-        setAngle(-current * DEG_PER_PX);
+        // Once the blue fills the window the C is completely covered. Hide the stage and stop updating it: a huge,
+        // rotating, masked SVG repainting behind an opaque layer for the whole long scroll was pure waste.
+        var open = p >= 1 && !homing;
+        var ang = Math.round(-current * DEG_PER_PX * 100) / 100;
         var scale = Math.exp(Math.log(maxScale) * Math.pow(p, 1.7));
         var tx = -C_OFFSET_X * unit * smooth(0, .55, p);
-        wrap.style.transform = 'translate(' + tx + 'px,0) scale(' + scale + ')';
-        disc.setAttribute('opacity', smooth(.08, .6, p));
-        var textOpacity = 1 - smooth(0, .3, p);
-        zfade.setAttribute('opacity', textOpacity);
-        subfade.style.opacity = textOpacity;
+        var dr = 185 * unit * scale;   // the blue disc's radius on screen
+        put('stage', open, function (v) { stage.style.visibility = v ? 'hidden' : ''; });
+        if (!open) {
+          put('ang', ang, setAngle);
+          put('wrap', 'translate(' + tx + 'px,0) scale(' + scale + ')', function (v) { wrap.style.transform = v; });
+          var textOpacity = 1 - smooth(0, .3, p);
+          put('disc', smooth(.08, .6, p), function (v) { disc.setAttribute('opacity', v); });
+          put('zfade', textOpacity, function (v) { zfade.setAttribute('opacity', v); subfade.style.opacity = v; });
+        }
+
+        // The name in the corner becomes the small ZC mark while the black of the C is over it, so the swap is
+        // hidden. It turns the same way the big C does: anti-clockwise going down, clockwise coming back up.
+        var swapped = open || Math.hypot(baseCx + tx - nameX, baseCy - nameY) <= dr * 211 / 185;
+        put('swap', swapped, function (v) { head.classList.toggle('swapped', v); });
+        if (swapped) put('ring2', ang, function (v) { ring2.setAttribute('transform', 'rotate(' + v + ' ' + CX + ' ' + CY + ')'); });
 
         // The colour layer and the work column are clipped to the C's blue circle, so the rows are already in
         // place while it opens, and going home they stay put at full strength and only leave as the blue does.
-        // Once the blue fills the window the clip circle is bigger than the window, so it does nothing: drop it (and the
-        // per-frame measuring) while scrolling the long part of the page. Masked + clipped full-window layers are slow in Safari.
-        var open = p >= 1 && !homing;
-        var r = open ? null : disc.getBoundingClientRect();
-        // The name in the corner becomes the small ZC mark while the black of the C is over it, so the swap is
-        // hidden. It turns the same way the big C does: anti-clockwise going down, clockwise coming back up.
-        var midR = open ? 0 : r.width / 2 * 211 / 185;   // radius of the middle of the ring
-        head.classList.toggle('swapped', open || Math.hypot(r.left + r.width / 2 - nameX, r.top + r.height / 2 - nameY) <= midR);
-        ring2.setAttribute('transform', 'rotate(' + (-current * DEG_PER_PX) + ' ' + CX + ' ' + CY + ')');
-        var clip = open ? 'none' : 'circle(' + (r.width / 2 * C_INNER_R / 185) + 'px at ' + (r.left + r.width / 2) + 'px ' + (r.top + r.height / 2) + 'px)';
+        // Once the blue fills the window the clip circle is bigger than the window, so it does nothing: drop it.
+        // Masked + clipped full-window layers are slow in Safari.
+        var clip = open ? 'none' : 'circle(' + (unit * scale * C_INNER_R) + 'px at ' + (baseCx + tx) + 'px ' + baseCy + 'px)';
         // Opening: the rows fade in once the disc is fully blue (p = .6). Going home they stay full strength
         // and only go as the blue goes.
         var on = homing ? smooth(.08, .6, p) : smooth(.6, .75, p);
@@ -452,12 +470,12 @@
           var k = smooth(st[0] - vh * .9, st[0] - vh * .1, shift);
           col = col.map(function (c, i) { return c + (st[1][i] - c) * k; });
         });
-        if (!open || !isOpen) bg.style.clipPath = mask.style.clipPath = clip;
-        isOpen = open;
-        bg.style.opacity = mask.style.opacity = on;
-        bg.style.backgroundColor = 'rgb(' + col.map(Math.round).join(',') + ')';
-        mask.style.pointerEvents = p >= .97 ? 'auto' : 'none';
-        flow.style.transform = 'translate3d(' + (-pan * vw) + 'px,' + (-shift) + 'px,0)';
+        put('clip', clip, function (v) { bg.style.clipPath = mask.style.clipPath = v; });
+        put('on', on, function (v) { bg.style.opacity = mask.style.opacity = v; });
+        put('bgc', 'rgb(' + col.map(Math.round).join(',') + ')', function (v) { bg.style.backgroundColor = v; });
+        put('pe', p >= .97 ? 'auto' : 'none', function (v) { mask.style.pointerEvents = v; });
+        put('masked', open || shift > 0 || pan > 0, function (v) { mask.classList.toggle('masked', v); });   // nothing sits under the fade at rest, so skip the mask while the C opens
+        put('flow', 'translate3d(' + (-pan * vw) + 'px,' + (-shift) + 'px,0)', function (v) { flow.style.transform = v; });
         requestAnimationFrame(frame);
       })(performance.now());
     }
