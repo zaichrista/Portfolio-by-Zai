@@ -5,6 +5,7 @@
   function centre() {
     document.querySelectorAll('.browser').forEach(function (b) {
       b.style.marginTop = '0';
+      if (window.innerWidth <= 860) return;   // single column: nothing to centre against
       b.style.marginTop = Math.max(0, (window.innerHeight - b.offsetHeight) / 2 - top(b)) + 'px';
     });
   }
@@ -23,7 +24,7 @@
 // The ZC mark in the corner turns with the scroll, as on the home page.
 (function () {
   var ring = document.getElementById('ring2');
-  if (!ring) return;
+  if (!ring || window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;   // no spinning on touch: it costs a repaint per scroll event
   function turn() { ring.setAttribute('transform', 'rotate(' + (-window.scrollY * 0.1) + ' 1197 624.5)'); }
   turn();
   window.addEventListener('scroll', turn, { passive: true });

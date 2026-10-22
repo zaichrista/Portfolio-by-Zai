@@ -2,7 +2,7 @@
 @font-face { font-family: 'IBM Plex Mono'; font-weight: 500; font-display: swap; src: url(fonts/plex-mono-500.woff2) format('woff2'); }
 @font-face { font-family: 'IBM Plex Mono'; font-weight: 700; font-display: swap; src: url(fonts/plex-mono-700.woff2) format('woff2'); }
 
-:root { --ink: #000; --page: #d9cdf3; --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace; --small: clamp(13px, 1.05vw, 21px); --gutter: 1.75vw; }
+:root { --ink: #000; --page: #d9cdf3; --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace; --small: clamp(14px, 1.05vw, 21px); --gutter: 1.75vw; }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { background: var(--page); color: var(--ink); font-family: var(--mono); -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
@@ -23,7 +23,7 @@ a:hover { text-decoration-thickness: 2px; }
 .facts dt { font-weight: 700; }
 .facts dd { margin: 0; }
 .info p { margin: 0 0 1em; max-width: 40em; font-size: clamp(12px, min(1.05vw, 1.75vh), 19px); line-height: 1.6; }
-.visit { display: inline-block; margin: 1.5vh 0 0; padding: .6em 1.1em; border: 1px solid #000; text-decoration: none; transition: background .2s, color .2s; }
+.visit { display: inline-block; margin: .4em 0 2.4vh; padding: .6em 1.1em; border: 1px solid #000; text-decoration: none; transition: background .2s, color .2s; }
 .visit:hover { background: #000; color: var(--page); }
 
 /* wider, and centred on the window's height (the top margin is set in project.js); capped so it never runs into the strip */
@@ -46,7 +46,6 @@ a:hover { text-decoration-thickness: 2px; }
   .project { grid-template-columns: 1fr; gap: 6vh; }
   .info { position: static; }
   .info .back { margin-bottom: 4vh; }
-0
 }
 
 /* Top-left ZC mark (same as the home page, turning with the scroll) */
@@ -85,3 +84,33 @@ a:hover { text-decoration-thickness: 2px; }
 /* Both project pages sit in the same cell while one slides in and the other out; the strip below never moves. */
 .pages { flex: 1; display: grid; overflow-x: clip; }
 .pages > .project { grid-area: 1 / 1; min-width: 0; }
+
+/* Static preview: shown instead of the live iframe on phones and tablets, where a scaled 1440px page is unreadable and slow. */
+.shot { display: none; }
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+@media (max-width: 860px), (hover: none) and (pointer: coarse) {
+  .viewport iframe { display: none; }
+  .shot { display: block; position: absolute; inset: 0; }
+}
+
+/* The project in short */
+.case { grid-column: 1 / -1; margin-top: 10vh; font-size: var(--small); line-height: 1.6; }
+.case-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3vw; margin: 4vh 0 8vh; }
+.case-cols .label { margin: 0 0 .8em; }
+.case p { margin: 0; max-width: 32em; }
+.label { margin: 0; font-weight: 700; font-size: var(--small); }
+.gallery { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 3fr); gap: 3vw; align-items: start; }
+.gallery figure { margin: 0; }
+.gallery img { display: block; width: 100%; height: auto; border: 1px solid #000; background: #fff; }
+.g-wide img { max-height: 78vh; object-fit: cover; object-position: top; }
+.gallery figcaption { margin-top: .6em; opacity: .7; }
+@media (max-width: 860px) {
+  :root { --small: 15px; }
+  .case { margin-top: 6vh; }
+  .case-cols { grid-template-columns: 1fr; gap: 24px; }
+  .gallery { grid-template-columns: 1fr; gap: 24px; }
+  .g-phone { max-width: 65%; }
+  .site-head nav { gap: .8em; }
+  .info p { font-size: 15px; }
+}
+@media (hover: none) { .arrow:hover, .arrow:first-child:hover, .arrow:last-child:hover { transform: none; } }

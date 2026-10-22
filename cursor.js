@@ -19,6 +19,14 @@
   el.setAttribute('aria-hidden', 'true');
   document.body.appendChild(el);
 
+  // Fetch and decode every logo up front so the cursor never appears blank or pops in on first hover.
+  var warm = [];
+  [].slice.call(document.querySelectorAll('[data-logo]')).forEach(function (t) {
+    var img = new Image(); img.src = t.getAttribute('data-logo');
+    if (img.decode) img.decode().catch(function () {});
+    warm.push(img);   // keep a reference so the browser doesn't drop it
+  });
+
   var current = null, pressed = false;
   function show(t) { current = t; el.style.backgroundImage = 'url("' + t.getAttribute('data-logo') + '")'; el.classList.add('on'); }
   function hide() { current = null; el.classList.remove('on'); }

@@ -2,15 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="The portfolio of Zaira Christa, a web designer building thoughtful digital experiences.">
-  <title>Zaira Christa — Web Designer</title>
+  <meta name="description" content="Zaira Christa is a brand-led web designer in London. Identity, strategy and websites for hospitality brands.">
+  <meta property="og:type" content="website"><meta property="og:title" content="Zaira Christa — Brand-led Web Designer"><meta property="og:description" content="Brand-led web designer in London. Identity, strategy and websites for hospitality brands.">
+  <meta name="twitter:card" content="summary"><meta name="theme-color" content="#87ceeb">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <title>Zaira Christa — Brand-led Web Designer</title>
   <link rel="preload" href="fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=3">
+  <link rel="stylesheet" href="home.css?v=4">
   <script>
-    // The loader only runs the first time the site is opened in a tab; later visits to home skip it.
-    try { if (!sessionStorage.getItem('zc-loaded')) document.documentElement.classList.add('loading'); } catch (e) { document.documentElement.classList.add('loading'); }
+    // Phones, tablets and anyone who asks for less motion get a plain scrolling page: the scroll-driven zoom is heavy on touch devices.
+    try { if (matchMedia('(prefers-reduced-motion: reduce), (max-width: 860px), (hover: none) and (pointer: coarse)').matches) document.documentElement.classList.add('reduced'); } catch (e) {}
   </script>
-  <noscript><style>.loading .z{opacity:1;transform:none}.loading .site-head,.loading .sub{opacity:1}.loading .counter{opacity:0}</style></noscript>
 </head>
 <body>
   <header class="site-head">
@@ -35,11 +37,10 @@
         </mask>
       </defs>
       <g id="zfade"><polygon class="z" fill="#000" points="592,395 881,395 651,801 889,801 889,854 562,854 790,449 592,449"/></g>
-      <text class="counter" id="counter" x="875" y="650" text-anchor="end" fill="#000">000%</text>
       <circle id="disc" cx="1197" cy="624.5" r="185" fill="#87ceeb" opacity="0"/>
       <g id="ring"><path id="ringShape" d="M986 624.5A211 211 0 0 1 1408 624.5L1408 624.5A211 211 0 0 1 986 624.5Z" fill="none" stroke="#000" stroke-width="56" mask="url(#gap)"/></g>
     </svg>
-    <div id="subfade"><p class="sub">web designer + brand strategist</p></div>
+    <div id="subfade"><p class="sub">brand-led web designer</p></div>
     </div>
   </main>
   <div class="bg" id="bg" aria-hidden="true"></div>
@@ -48,16 +49,16 @@
       <section class="work" id="work" aria-labelledby="work-h">
         <h2 class="label" id="work-h">work <span>(04)</span></h2>
         <ol class="rows">
-      <li><a class="row" href="work/the-reach-riverside/" data-iris data-logo="logos/the-reach-riverside.png"><span class="brand">THE REACH RIVERSIDE</span><span class="role">Lead brand designer + strategist</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
-      <li><a class="row" href="work/the-reach-catering/" data-iris data-logo="logos/the-reach-catering.png"><span class="brand">THE REACH CATERING</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
-      <li><a class="row" href="work/mandaloun/" data-iris data-logo="logos/mandaloun.png"><span class="brand">MANDALOUN</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
-      <li><a class="row" href="work/zc-studios/" data-iris data-logo="logos/zc-studios.png"><span class="brand">ZC STUDIOS</span><span class="role">Founder + creative lead</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="the-reach-riverside.html" data-iris data-logo="logos/the-reach-riverside.png"><img class="thumb" src="logos/the-reach-riverside.png" alt="" width="64" height="64" loading="lazy"><span class="brand">THE REACH RIVERSIDE</span><span class="role">Lead brand designer + strategist</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="the-reach-catering.html" data-iris data-logo="logos/the-reach-catering.png"><img class="thumb" src="logos/the-reach-catering.png" alt="" width="64" height="64" loading="lazy"><span class="brand">THE REACH CATERING</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="mandaloun.html" data-iris data-logo="logos/mandaloun.png"><img class="thumb" src="logos/mandaloun.png" alt="" width="64" height="64" loading="lazy"><span class="brand">MANDALOUN</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><a class="row" href="zc-studios.html" data-iris data-logo="logos/zc-studios.png"><img class="thumb" src="logos/zc-studios.png" alt="" width="64" height="64" loading="lazy"><span class="brand">ZC STUDIOS</span><span class="role">Founder + creative lead</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
         </ol>
       </section>
 
       <section class="about" id="about" aria-labelledby="about-h">
         <h2 class="label" id="about-h">about</h2>
-        <p class="statement">I'm a web designer and brand strategist, sharpening my taste and learning to turn what a brand is really saying into something cohesive and memorable.</p>
+        <p class="statement">I'm a brand-led web designer, sharpening my taste and learning to turn what a brand is really saying into something cohesive and memorable.</p>
         <div class="cols">
           <p>I came into design through music, fashion and culture. My music degree at Oxford taught me how much theory and thought sits behind art. My MA at King's then turned that interest into a fascination with what people wear, who people are, and how to really connect with them.</p>
           <p>I start with research: who the audience is, who the competition is, and where the gap really sits. Then I write the brief and build the identity and website myself, in Adobe Illustrator and Claude Code. I've built an AI-native workflow, which you can see in my work with ZC Studios, and I push at the line between human creativity and AI automation. The aim isn't to take anything out of the making. It's to give me more time.</p>
@@ -72,7 +73,7 @@
 
       <section class="cv" id="cv" aria-labelledby="cv-h">
         <h2 class="label" id="cv-h">The CV, abridged <span>(Zaira Christa Barakat, london)</span></h2>
-        <p class="bio">Web designer + brand strategist. Builds sites end to end in Wix and in HTML + JavaScript, then works out what a page is failing to do (a missing call to action, say) and fixes it. King's College London MA, Oxford BA, a good eye for what's right and what's <em>nearly</em> right.</p>
+        <p class="bio">Brand-led web designer. Builds sites end to end in Wix and in HTML + JavaScript, then works out what a page is failing to do (a missing call to action, say) and fixes it. King's College London MA, Oxford BA, a good eye for what's right and what's <em>nearly</em> right.</p>
 
         <ul class="stats" aria-label="By the numbers">
           <li><b>+33%</b><span>ticket sales for Oxford Fashion Gala, running the Instagram campaign (300 → 400)</span></li>
@@ -90,7 +91,7 @@
           </div>
           <div>
             <h3 class="label">where I learned</h3>
-            <p><b>King's College London</b><br>MA Cultural and Creative Industries, 2025 – 26</p>
+            <p><b>King's College London</b><br>MA Cultural and Creative Industries, 2025 – 2026</p>
             <p><b>Oxford, Somerville</b><br>BA Music, 2:1, 2022 – 25</p>
             <p><b>Side quests</b><br>Oxford's first AI fashion catwalk (Oxford Mail covered it).<br>BEKAA, a hospitality concept from research to financial plan.<br>A Claude Code + Codex workflow that cuts a week from each project's research.</p>
           </div>
@@ -108,7 +109,8 @@
         <div class="hire">
           <p class="note">(psst, I'm open to new projects and jobs)</p>
           <a class="hire-link" href="mailto:zcbarakat@gmail.com">Hire me! <span aria-hidden="true">↗</span></a>
-          <p class="note">looking for my next role in web design + brand strategy. if there's a seat for me, say hello.</p>
+          <p class="note email"><a href="mailto:zcbarakat@gmail.com">zcbarakat@gmail.com</a></p>
+          <p class="note">looking for my next role in web design, with brand strategy at its core. if there's a seat for me, say hello.</p>
         </div>
 
         <div class="legal">
@@ -124,10 +126,8 @@
   (function () {
     var root = document.documentElement;
     var ring = document.getElementById('ring');
-    var counter = document.getElementById('counter');
     var CX = 1197, CY = 624.5;
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduce) root.classList.add('reduced');
+    var reduce = root.classList.contains('reduced');
 
     function setAngle(a) { ring.setAttribute('transform', 'rotate(' + a + ' ' + CX + ' ' + CY + ')'); }
 
@@ -423,54 +423,7 @@
       })(performance.now());
     }
 
-    if (!root.classList.contains('loading')) { initScroll(); return; } // already seen this session: no loader
-    var LOAD_MS = reduce ? 600 : 2800;   // time the counter takes to reach 100
-    var V0 = 0.3;                        // spin speed in deg/ms, constant until 100 and the speed the slow-down starts from
-    var MIN_EXTRA = 90;                  // least extra rotation after 100 before the gap lands facing right
-
-    function setCount(n) { counter.textContent = String(n).padStart(3, '0') + '%'; }
-
-    var start = null, angle = 0;
-    var settleStart = null, settleFrom = 0, settleDist = 0, settleMs = 0, revealed = false;
-
-    function reveal() {
-      if (revealed) return;
-      revealed = true;
-      try { sessionStorage.setItem('zc-loaded', '1'); } catch (e) {}
-      root.classList.remove('loading');
-    }
-
-    // Ease-out with a starting speed of exactly V0, so the ring only ever slows down after 100.
-    // Distance D covers the quadratic ease-out: speed at t=0 is 2D/T, so T = 2D/V0.
-    function settle(now) {
-      if (settleStart === null) {
-        settleStart = now;
-        settleFrom = angle;
-        // land on a multiple of 360 so the gap faces right, like the C in the logo
-        settleDist = Math.ceil((angle + MIN_EXTRA) / 360) * 360 - angle;
-        settleMs = 2 * settleDist / V0;
-      }
-      var t = Math.min(1, (now - settleStart) / settleMs);
-      setAngle(settleFrom + settleDist * (1 - (1 - t) * (1 - t)));
-      if (t > .7) reveal();
-      if (t < 1) requestAnimationFrame(settle); else { setAngle(0); reveal(); initScroll(); }
-    }
-
-    function tick(now) {
-      if (start === null) start = now;
-      var elapsed = now - start;
-      var p = Math.min(1, elapsed / LOAD_MS);
-      // slightly uneven progress so it reads as real loading
-      var eased = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
-      setCount(Math.round((0.6 * p + 0.4 * eased) * 100));
-      angle = elapsed * V0;
-      if (!reduce) setAngle(angle);
-      if (p < 1) { requestAnimationFrame(tick); return; }
-      setCount(100);
-      if (reduce) { setAngle(0); reveal(); } else requestAnimationFrame(settle);
-    }
-
-    requestAnimationFrame(tick);
+    initScroll();
   })();
   </script>
   <script src="transition.js"></script>

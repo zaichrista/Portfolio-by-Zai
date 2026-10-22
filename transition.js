@@ -5,7 +5,8 @@
 //  - Project -> project (links marked data-slide): the page slides sideways, passing through any projects in
 //    between, while the project strip stays where it is.
 (function () {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // Heavy (it loads a live copy of the next page in an iframe), so phones and reduced-motion visitors just get normal navigation.
+  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 860px), (hover: none) and (pointer: coarse)').matches) return;
   var R_OUT = 239, R_IN = 183, busy = false;
   var RING_SVG = '<svg viewBox="958 385.5 478 478" width="100%" height="100%" aria-hidden="true">' +
     '<defs><mask id="iris-gap" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="650"><rect x="900" y="300" width="600" height="650" fill="#fff"/><rect x="1360" y="596.5" width="120" height="56" fill="#000"/></mask></defs>' +
@@ -22,13 +23,12 @@
     var S = 1.15 * far / R_IN, dir = a.getAttribute('data-dir') === 'prev' ? 1 : -1, DUR = 950;
     var loadedAt = null, animDone = false, leaving = false;
     busy = true;   // ignore further clicks while this plays
-    try { sessionStorage.setItem('zc-loaded', '1'); } catch (er) {}   // the main page should open straight on its content, not replay the loader
 
     var page = document.createElement('iframe');
     page.className = 'zc-iris-page';
     page.setAttribute('aria-hidden', 'true'); page.tabIndex = -1;
     page.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;border:0;z-index:9998;pointer-events:none;clip-path:circle(' + R_IN * .02 + 'px at ' + x + 'px ' + y + 'px)';
-    page.addEventListener('load', function () { loadedAt = performance.now(); finish(); });
+    whenReady(page, function () { loadedAt = performance.now(); finish(); });
     page.src = a.href;
     document.body.appendChild(page);
 
@@ -54,6 +54,32 @@
 
   var ease = 'cubic-bezier(.65, 0, .35, 1)';
 
+  // Call back once the page in the iframe has parsed (its own HTML and scripts), without waiting for the full load
+  // event, which also waits for the live site embedded in each project page.
+  function whenReady(frame, cb) {
+    var done = false;
+    function go() { if (done) return; done = true; cb(); }
+    frame.addEventListener('load', go);
+    (function poll() {
+      if (done) return;
+      try {
+        var d = frame.contentDocument;
+        if (d && frame.contentWindow.location.href !== 'about:blank' && d.readyState !== 'loading' && d.body) { go(); return; }
+      } catch (er) { return; }   // cross-origin: rely on the load event
+      requestAnimationFrame(poll);   // not attached or still loading: check again next frame
+    })();
+  }
+
+  // Warm the cache for the pages a visitor is likely to open next.
+  function prefetch() {
+    var seen = {};
+    [].slice.call(document.querySelectorAll('a[data-iris], a.tile')).forEach(function (a) {
+      if (seen[a.href]) return; seen[a.href] = 1;
+      var l = document.createElement('link'); l.rel = 'prefetch'; l.href = a.href; document.head.appendChild(l);
+    });
+  }
+  if ('requestIdleCallback' in window) requestIdleCallback(prefetch); else setTimeout(prefetch, 1500);
+
   // ---- project -> main page: the zoom in reverse. The project stays inside the shrinking C; the main page
   // (in an iframe on top) shows through everywhere outside it. ----
   function zoomOut(a, e) {
@@ -66,7 +92,6 @@
     var far = Math.max(Math.hypot(x, y), Math.hypot(w - x, y), Math.hypot(x, h - y), Math.hypot(w - x, h - y));
     var S = 1.15 * far / R_IN, DUR = 950, started = false;
     busy = true;
-    try { sessionStorage.setItem('zc-loaded', '1'); } catch (er) {}
 
     var hole = 'radial-gradient(circle at ' + x + 'px ' + y + 'px, transparent var(--zc-r), #000 calc(var(--zc-r) + 1px))';
     var page = document.createElement('iframe');
@@ -90,7 +115,7 @@
         window.location.href = a.href;
       });
     }
-    page.addEventListener('load', function () { setTimeout(start, 150); });   // let the main page draw first
+    whenReady(page, function () { setTimeout(start, 150); });   // let the main page draw first
     setTimeout(start, 1500);
     page.src = a.href;
   }
@@ -107,7 +132,6 @@
     var homeX = w / 2 + (1197 - 1000) * unit, homeY = h / 2 + (624.5 - 625) * unit;
     var far = Math.hypot(w / 2, h / 2), S = 1.15 * far / R_IN, DUR = 1150, started = false;
     busy = true;
-    try { sessionStorage.setItem('zc-loaded', '1'); } catch (er) {}
 
     var hole = 'radial-gradient(circle at var(--zc-x) var(--zc-y), transparent var(--zc-r), #000 calc(var(--zc-r) + 1px))';
     var page = document.createElement('iframe');
@@ -134,7 +158,7 @@
       else setTimeout(function () { try { sessionStorage.setItem('zc-iris', '1'); } catch (er) {} window.location.href = a.href; }, 120);
     }
     function start() { if (started) return; started = true; requestAnimationFrame(function (n) { frame(n, n); }); }
-    page.addEventListener('load', function () {
+    whenReady(page, function () {
       // the travelling ring stands in for the logo's C until it lands, so hide the page's own copy meanwhile
       try { var own = page.contentDocument.getElementById('ring'); if (own) own.style.visibility = 'hidden'; } catch (er) {}
       setTimeout(start, 150);
@@ -213,7 +237,7 @@
     if (a.hasAttribute('data-slide') && document.querySelector('.pages')) { e.preventDefault(); slide(a); return; }
     if (a.hasAttribute('data-iris')) { e.preventDefault(); iris(a, e); return; }
     var u = new URL(a.href, location.href);
-    if (document.querySelector('.more') && u.origin === location.origin && u.pathname.indexOf('/work/') === -1) {
+    if (document.querySelector('.more') && u.origin === location.origin && !/(the-reach-riverside|the-reach-catering|mandaloun|zc-studios)\.html$/.test(u.pathname)) {
       e.preventDefault();
       if (!u.hash || u.hash === '#') homeZoom(a); else zoomOut(a, e);   // home lands as the logo; the other sections zoom out to the click
     }
