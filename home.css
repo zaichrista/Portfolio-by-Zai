@@ -62,8 +62,6 @@ a { color: inherit; text-decoration: none; }
   opacity: 0; pointer-events: none;
 }
 .nudge.show { opacity: 1; transition: opacity 1.6s ease; }
-.nudge .or { display: block; opacity: 0; }   /* hides instantly on reset */
-.nudge.show .or { opacity: 1; transition: opacity 1.2s ease 1s; }
 .ch { display: inline-block; will-change: transform; }
 
 /* Real height is set in JS (zoom distance + content height); this is only the no-JS fallback. */

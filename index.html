@@ -29,7 +29,7 @@
   </header>
 
   <p class="hint" id="hint" aria-hidden="true">(keep going)</p>
-  <p class="nudge" id="nudge" aria-hidden="true">(scroll)<span class="or">or don't :)</span></p>
+  <p class="nudge" id="nudge" aria-hidden="true">(scroll)</p>
 
   <div class="hero-wrap">
   <main class="stage">
@@ -425,8 +425,11 @@
     }
 
     // Phones and tablets: the same idea as the desktop scroll (the C turns and grows until its blue fills the window,
-    // then the page colour fades from section to section), built so the browser only ever moves two things:
-    // a transform on the logo and the colour of one fixed layer. No clipping, no masks, no measuring while scrolling.
+    // then the page colour fades from section to section).
+    // Where the browser supports scroll-driven animations, the whole thing is handed to it: the browser ties each value
+    // to the scroll position itself, in step with the page, with no script running while you scroll. (A script always
+    // hears about a scroll after it has happened, which is what made this stutter on phones.) Older browsers fall back to
+    // a script that moves just two things, a transform on the logo and the colour of one fixed layer.
     function initLite() {
       var wrap = document.querySelector('.lockup-wrap'), disc = document.getElementById('disc');
       var zfade = document.getElementById('zfade'), subfade = document.getElementById('subfade');
@@ -434,39 +437,85 @@
       var sections = ['about', 'cv'].map(function (id) { return document.getElementById(id); }).concat(document.querySelector('.foot'));
       var SKY = [135, 206, 235], STOPS = [[247, 212, 214], [255, 214, 176], [208, 234, 200]];   // blush, orange, green
       var VIEW_W = 920, C_INNER_R = 183, C_OFFSET_X = 1197 - 1000;
-      var unit, maxScale, range, vh, tops = [], ticking = false, lastCol = '';
+      var native = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'));
+      var unit, maxScale, range, vh, total, tops = [], ticking = false, lastCol = '', styleEl = null;
       function clamp01(x) { return Math.max(0, Math.min(1, x)); }
       function smooth(a, b, x) { var t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); }
-      function measure() {
-        var w = stage.clientWidth; vh = stage.clientHeight;   // the stage is 100svh, so this doesn't shift as the address bar moves
-        unit = wrap.offsetWidth / VIEW_W;
-        maxScale = 1.1 * Math.hypot(w, vh) / 2 / (C_INNER_R * unit);
-        range = vh * .9;
-        tops = sections.map(function (e) { return e.getBoundingClientRect().top + window.scrollY; });
+      function r2(n) { return Math.round(n * 100) / 100; }
+
+      // the values, as functions of how far through the zoom we are (p) and of the scroll position (y)
+      function zoomAt(p) {
+        return { x: -C_OFFSET_X * unit * smooth(0, .55, p), s: Math.exp(Math.log(maxScale) * Math.pow(p, 1.7)),
+                 disc: smooth(.08, .6, p), text: 1 - smooth(0, .3, p) };
       }
-      function frame() {
-        ticking = false;
-        var y = window.scrollY, p = clamp01(y / range);
-        setAngle(-y * .1);
-        wrap.style.transform = 'translate(' + (-C_OFFSET_X * unit * smooth(0, .55, p)) + 'px,0) scale(' + Math.exp(Math.log(maxScale) * Math.pow(p, 1.7)) + ')';
-        disc.setAttribute('opacity', smooth(.08, .6, p));
-        var t = 1 - smooth(0, .3, p);
-        zfade.setAttribute('opacity', t); subfade.style.opacity = t;
-        nudge.classList.toggle('show', y < 8);
+      function colourAt(y) {
         var col = SKY;
         STOPS.forEach(function (c, i) {
           var k = smooth(tops[i] - vh * .9, tops[i] - vh * .1, y);
           col = col.map(function (v, j) { return v + (c[j] - v) * k; });
         });
-        var css = 'rgb(' + col.map(Math.round).join(',') + ')';
+        return 'rgb(' + col.map(Math.round).join(',') + ')';
+      }
+
+      function measure() {
+        var w = stage.clientWidth; vh = stage.clientHeight;   // the stage is 100svh, so this doesn't shift as the address bar moves
+        unit = wrap.offsetWidth / VIEW_W;
+        maxScale = 1.1 * Math.hypot(w, vh) / 2 / (C_INNER_R * unit);
+        range = vh * .9;
+        total = Math.max(1, document.documentElement.scrollHeight - vh);
+        tops = sections.map(function (e) { return e.getBoundingClientRect().top + window.scrollY; });
+      }
+
+      // ---- scroll-driven animations ----
+      function buildNative() {
+        var N = 40, zoom = '', dsc = '', fade = '', spin = '', i, p, pc, v;
+        for (i = 0; i <= N; i++) {
+          p = i / N; pc = r2(p * 100) + '%'; v = zoomAt(p);
+          zoom += pc + '{transform:translate(' + r2(v.x) + 'px,0) scale(' + v.s.toFixed(4) + ')}';
+          dsc += pc + '{opacity:' + v.disc.toFixed(3) + '}';
+          fade += pc + '{opacity:' + v.text.toFixed(3) + '}';
+          spin += pc + '{transform:rotate(' + r2(-p * range * .1) + 'deg)}';
+        }
+        var step = Math.max(40, total / 110), back = '', y;
+        for (y = 0; y < total + step; y += (y < range * 1.1 ? 20 : step)) {   // finer through the hero, where the colour comes in fastest
+          var yy = Math.min(y, total);
+          back += r2(yy / total * 100) + '%{background-color:' + colourAt(yy) + ';opacity:' + smooth(.85, 1, clamp01(yy / range)).toFixed(3) + '}';
+          if (yy === total) break;
+        }
+        var tl = 'animation-timing-function:linear;animation-fill-mode:both;animation-timeline:scroll(root);';
+        var css = '@keyframes lz{' + zoom + '}@keyframes ld{' + dsc + '}@keyframes lf{' + fade + '}@keyframes lr{' + spin + '}@keyframes lb{' + back + '}' +
+          '.lite .lockup-wrap{animation-name:lz;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
+          '.lite #disc{animation-name:ld;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
+          '.lite #zfade,.lite #subfade{animation-name:lf;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
+          '.lite #ring{transform-origin:1197px 624.5px;animation-name:lr;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(range) + 'px}' +
+          '.lite .bg{animation-name:lb;animation-duration:1ms;' + tl + 'animation-range:0px ' + r2(total) + 'px}';
+        if (!styleEl) { styleEl = document.createElement('style'); document.head.appendChild(styleEl); }
+        styleEl.textContent = css;
+      }
+
+      // ---- fallback: a script that follows the scroll ----
+      function frame() {
+        ticking = false;
+        var y = window.scrollY, p = clamp01(y / range), v = zoomAt(p);
+        setAngle(-y * .1);
+        wrap.style.transform = 'translate(' + v.x + 'px,0) scale(' + v.s + ')';
+        disc.setAttribute('opacity', v.disc);
+        zfade.setAttribute('opacity', v.text); subfade.style.opacity = v.text;
+        var css = colourAt(y);
         if (css !== lastCol) { bg.style.backgroundColor = css; lastCol = css; }
         bg.style.opacity = smooth(.85, 1, p);
       }
-      function request() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
-      measure(); frame();
+      function request() { if (!ticking) { ticking = true; requestAnimationFrame(native ? hint : frame); } }
+      function hint() { ticking = false; nudge.classList.toggle('show', window.scrollY < 8); }
+
+      measure();
+      if (native) buildNative(); else frame();
+      hint();
       window.addEventListener('scroll', request, { passive: true });
-      window.addEventListener('resize', function () { measure(); request(); });
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); request(); });
+      function remeasure() { measure(); if (native) buildNative(); request(); }
+      window.addEventListener('resize', remeasure);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(remeasure);
+      window.addEventListener('load', remeasure);
     }
 
     if (root.classList.contains('lite')) initLite(); else initScroll();
