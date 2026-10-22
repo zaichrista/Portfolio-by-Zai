@@ -17,7 +17,7 @@ a:hover { text-decoration-thickness: 2px; }
 /* Left column: all the text, which scrolls. Right column: the website preview, which stays where it is. */
 .info { display: contents; }
 .head { grid-column: 1; grid-row: 1; }
-.blurb { grid-column: 1; grid-row: 2; margin-top: 7vh; }
+.blurb { grid-column: 1; grid-row: 3; margin-top: 4vh; }
 .head .back { display: inline-block; margin-bottom: 3vh; }
 .head h1 { font-weight: 400; font-size: clamp(26px, min(3.6vw, 6vh), 84px); line-height: 1; letter-spacing: -.02em; margin: 0 0 .5em; overflow-wrap: anywhere; }
 .tags { margin: 0 0 2.2vh; font-weight: 500; }
@@ -97,7 +97,7 @@ a:hover { text-decoration-thickness: 2px; }
 }
 
 /* The project in short: same column and type size as the paragraphs above it */
-.case { grid-column: 1; grid-row: 3; margin-top: 7vh; font-size: var(--body); line-height: 1.6; }
+.case { grid-column: 1; grid-row: 2; margin-top: 4vh; font-size: var(--body); line-height: 1.6; }
 .case-cols { display: grid; gap: .7em; margin: .7em 0 0; }
 .case-cols > div { display: grid; grid-template-columns: 9em minmax(0, 1fr); gap: 1em; }
 .case p { margin: 0; }
@@ -116,6 +116,6 @@ a:hover { text-decoration-thickness: 2px; }
   .project { grid-template-columns: 1fr; row-gap: 2vh; }
   .head { position: static; grid-column: 1; grid-row: auto; }
   .blurb, .case, .browser { grid-column: 1; grid-row: auto; margin-top: 4vh; }
-  .browser { position: static; }
+  .head { order: 1; } .case { order: 2; } .blurb { order: 3; } .browser { order: 4; position: static; }
   .project { padding-bottom: 14vh; }
 }
