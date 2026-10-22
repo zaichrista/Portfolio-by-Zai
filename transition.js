@@ -5,8 +5,10 @@
 //  - Project -> project (links marked data-slide): the page slides sideways, passing through any projects in
 //    between, while the project strip stays where it is.
 (function () {
-  // Heavy (it loads a live copy of the next page in an iframe), so phones and reduced-motion visitors just get normal navigation.
-  if (window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 860px), (hover: none) and (pointer: coarse)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // The circle transitions load a live copy of the next page in an iframe, which is heavy, so phones skip them and
+  // navigate normally. The sideways slide between projects is cheap and stays.
+  var LIGHT = window.matchMedia('(max-width: 860px), (hover: none) and (pointer: coarse)').matches;
   var R_OUT = 239, R_IN = 183, busy = false;
   var RING_SVG = '<svg viewBox="958 385.5 478 478" width="100%" height="100%" aria-hidden="true">' +
     '<defs><mask id="iris-gap" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="650"><rect x="900" y="300" width="600" height="650" fill="#fff"/><rect x="1360" y="596.5" width="120" height="56" fill="#000"/></mask></defs>' +
@@ -78,7 +80,7 @@
       var l = document.createElement('link'); l.rel = 'prefetch'; l.href = a.href; document.head.appendChild(l);
     });
   }
-  if ('requestIdleCallback' in window) requestIdleCallback(prefetch); else setTimeout(prefetch, 1500);
+  if (!LIGHT) { if ('requestIdleCallback' in window) requestIdleCallback(prefetch); else setTimeout(prefetch, 1500); }
 
   // ---- project -> main page: the zoom in reverse. The project stays inside the shrinking C; the main page
   // (in an iframe on top) shows through everywhere outside it. ----
@@ -181,7 +183,8 @@
       var pages = document.querySelector('.pages'), old = pages.querySelector('.project');
       var W = pages.clientWidth, k = mains.length;
       old.classList.add('no-enter');   // moving it into the row would otherwise replay its entrance animation
-      window.scrollTo(0, 0);
+      // Glide back to the top while the page slides, rather than snapping there first (which flashed the other page).
+      if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: 'smooth' });
 
       // lay the pages side by side in travel order and slide the row
       var track = document.createElement('div');
@@ -235,6 +238,7 @@
     var a = e.target.closest && e.target.closest('a[href]');
     if (!a || busy || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button || a.target === '_blank') return;
     if (a.hasAttribute('data-slide') && document.querySelector('.pages')) { e.preventDefault(); slide(a); return; }
+    if (LIGHT) return;
     if (a.hasAttribute('data-iris')) { e.preventDefault(); iris(a, e); return; }
     var u = new URL(a.href, location.href);
     if (document.querySelector('.more') && u.origin === location.origin && !/(the-reach-riverside|the-reach-catering|mandaloun|zc-studios)\.html$/.test(u.pathname)) {
