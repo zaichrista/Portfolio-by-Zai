@@ -11,6 +11,7 @@
     if (window.top !== window) document.documentElement.classList.add('in-iris');
     else try { if (sessionStorage.getItem('zc-iris')) { document.documentElement.classList.add('no-enter'); sessionStorage.removeItem('zc-iris'); } } catch (e) {}
   </script>
+  <script src="loader.js" data-bg="#f4eedd"></script>
 </head>
 <body>
 <header class="site-head">
@@ -53,8 +54,8 @@
     <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="url">mandaloun.com</span></div>
     <div class="viewport">
       <!-- A live preview only. The sandbox stops anything inside it sending the visitor away; "View full website" is the only way out. -->
-      <iframe src="https://zaichrista.github.io/Mandaloun-Westfield/" title="Preview of Mandaloun" loading="lazy" sandbox="allow-scripts allow-same-origin"></iframe>
-      <a class="shot" href="https://mandaloun.com" target="_blank" rel="noopener" aria-label="Open Mandaloun"><img src="images/mandaloun-desktop.webp" alt="Homepage of the Mandaloun website" width="1440" height="900" loading="lazy"></a>
+      <iframe src="https://zaichrista.github.io/Mandaloun-Westfield/" title="Preview of Mandaloun" sandbox="allow-scripts allow-same-origin"></iframe>
+      <a class="shot" href="https://mandaloun.com" target="_blank" rel="noopener" aria-label="Open Mandaloun"><img src="images/mandaloun-desktop.webp" alt="Homepage of the Mandaloun website" width="1440" height="900"></a>
     </div>
   </div>
 </main>
