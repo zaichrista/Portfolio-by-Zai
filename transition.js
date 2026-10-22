@@ -6,8 +6,8 @@
 //    between, while the project strip stays where it is.
 (function () {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  // The circle transitions load a live copy of the next page in an iframe, which is heavy, so phones skip them and
-  // navigate normally. The sideways slide between projects is cheap and stays.
+  // The full circle transitions load a live copy of the next page in an iframe, which is heavy on a phone. Phones get
+  // irisLite instead (the ring and a cream disc, nothing else), and plain navigation when leaving a project.
   var LIGHT = window.matchMedia('(max-width: 860px), (hover: none) and (pointer: coarse)').matches;
   var R_OUT = 239, R_IN = 183, busy = false;
   var RING_SVG = '<svg viewBox="958 385.5 478 478" width="100%" height="100%" aria-hidden="true">' +
@@ -80,7 +80,31 @@
       var l = document.createElement('link'); l.rel = 'prefetch'; l.href = a.href; document.head.appendChild(l);
     });
   }
-  if (!LIGHT) { if ('requestIdleCallback' in window) requestIdleCallback(prefetch); else setTimeout(prefetch, 1500); }
+  if ('requestIdleCallback' in window) requestIdleCallback(prefetch); else setTimeout(prefetch, 1500);
+
+  // ---- phones, main page -> project: the ring grows from the tap with a disc in the project page's colour inside it.
+  // Only transforms move, and nothing from the next page is loaded until the ring has covered the screen. ----
+  var PAGE_BG = '#f4eedd';   // keep in step with --page in project.css
+  function irisLite(a, e) {
+    var x, y;
+    if (e.clientX || e.clientY) { x = e.clientX; y = e.clientY; }
+    else { var r = a.getBoundingClientRect(); x = r.left + r.width / 2; y = r.top + r.height / 2; }
+    var w = window.innerWidth, h = window.innerHeight;
+    var far = Math.max(Math.hypot(x, y), Math.hypot(w - x, y), Math.hypot(x, h - y), Math.hypot(w - x, h - y));
+    var S = 1.15 * far / R_IN, DUR = 800;
+    busy = true;
+    var disc = document.createElement('div');
+    disc.className = 'zc-iris-page';
+    disc.style.cssText = 'position:fixed;z-index:9998;pointer-events:none;border-radius:50%;background:' + PAGE_BG + ';will-change:transform;width:' + 2 * R_IN + 'px;height:' + 2 * R_IN + 'px;left:' + (x - R_IN) + 'px;top:' + (y - R_IN) + 'px';
+    var ring = document.createElement('div');
+    ring.className = 'zc-iris';
+    ring.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;will-change:transform;width:' + 2 * R_OUT + 'px;height:' + 2 * R_OUT + 'px;left:' + (x - R_OUT) + 'px;top:' + (y - R_OUT) + 'px';
+    ring.innerHTML = RING_SVG;
+    document.body.appendChild(disc); document.body.appendChild(ring);
+    disc.animate([{ transform: 'scale(.02)' }, { transform: 'scale(' + S + ')' }], { duration: DUR, easing: ease, fill: 'forwards' });
+    ring.animate([{ transform: 'scale(.02) rotate(0deg)' }, { transform: 'scale(' + S + ') rotate(' + (a.getAttribute('data-dir') === 'prev' ? 1 : -1) * 260 + 'deg)' }], { duration: DUR, easing: ease, fill: 'forwards' })
+      .finished.then(function () { window.location.href = a.href; });
+  }
 
   // ---- project -> main page: the zoom in reverse. The project stays inside the shrinking C; the main page
   // (in an iframe on top) shows through everywhere outside it. ----
@@ -238,8 +262,8 @@
     var a = e.target.closest && e.target.closest('a[href]');
     if (!a || busy || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button || a.target === '_blank') return;
     if (a.hasAttribute('data-slide') && document.querySelector('.pages')) { e.preventDefault(); slide(a); return; }
+    if (a.hasAttribute('data-iris')) { e.preventDefault(); if (LIGHT) irisLite(a, e); else iris(a, e); return; }
     if (LIGHT) return;
-    if (a.hasAttribute('data-iris')) { e.preventDefault(); iris(a, e); return; }
     var u = new URL(a.href, location.href);
     if (document.querySelector('.more') && u.origin === location.origin && !/(the-reach-riverside|the-reach-catering|mandaloun|zc-studios)\.html$/.test(u.pathname)) {
       e.preventDefault();

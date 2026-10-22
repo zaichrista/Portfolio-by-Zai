@@ -2,7 +2,7 @@
 @font-face { font-family: 'IBM Plex Mono'; font-weight: 500; font-display: swap; src: url(fonts/plex-mono-500.woff2) format('woff2'); }
 @font-face { font-family: 'IBM Plex Mono'; font-weight: 700; font-display: swap; src: url(fonts/plex-mono-700.woff2) format('woff2'); }
 
-:root { --ink: #000; --page: #d9cdf3; --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace; --small: clamp(14px, 1.05vw, 21px); --gutter: 1.75vw; }
+:root { --ink: #000; --page: #f4eedd; --body: clamp(12px, min(1.05vw, 1.75vh), 19px); --mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace; --small: clamp(14px, 1.05vw, 21px); --gutter: 1.75vw; }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { background: var(--page); color: var(--ink); font-family: var(--mono); -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
@@ -13,21 +13,24 @@ a:hover { text-decoration-thickness: 2px; }
 .site-head nav { display: flex; gap: 2.2em; padding-top: .25em; }
 .site-head nav a:hover { text-decoration: underline; }
 
-.project { flex: 1; display: block; padding: 4vh var(--gutter) 14vh; }
-.info { font-size: var(--small); line-height: 1.6; display: grid; grid-template-columns: minmax(0, 4.6fr) minmax(0, 7.4fr); gap: 3vw; align-items: start; }
-.info .back { display: inline-block; margin-bottom: 3vh; }
-.info h1 { font-weight: 400; font-size: clamp(26px, min(3.6vw, 6vh), 84px); line-height: 1; letter-spacing: -.02em; margin: 0 0 .5em; overflow-wrap: anywhere; }
+.project { flex: 1; display: grid; grid-template-columns: minmax(0, 4.6fr) minmax(0, 7.4fr); column-gap: 3vw; align-content: start; padding: 3vh var(--gutter) 14vh; font-size: var(--small); line-height: 1.6; }
+/* Left column: the title block stays put. Right column: copy, project in short and the preview scroll past it. */
+.info { display: contents; }
+.head { grid-column: 1; grid-row: 1 / span 3; position: sticky; top: 4vh; align-self: start; }
+.blurb { grid-column: 2; grid-row: 1; }
+.head .back { display: inline-block; margin-bottom: 3vh; }
+.head h1 { font-weight: 400; font-size: clamp(26px, min(3.6vw, 6vh), 84px); line-height: 1; letter-spacing: -.02em; margin: 0 0 .5em; overflow-wrap: anywhere; }
 .tags { margin: 0 0 2.2vh; font-weight: 500; }
 .facts { margin: 0 0 2.4vh; padding: 0; display: grid; gap: .3em; }
 .facts div { display: grid; grid-template-columns: 6em 1fr; gap: 1em; }
 .facts dt { font-weight: 700; }
 .facts dd { margin: 0; }
-.info .blurb p { margin: 0 0 1em; max-width: 40em; font-size: clamp(12px, min(1.05vw, 1.75vh), 19px); line-height: 1.6; }
+.blurb p { margin: 0 0 .8em; max-width: 60em; font-size: var(--body); line-height: 1.6; }
 .visit { display: inline-block; margin: .4em 0 2.4vh; padding: .6em 1.1em; border: 1px solid #000; text-decoration: none; transition: background .2s, color .2s; }
 .visit:hover { background: #000; color: var(--page); }
 
-/* Wide, centred, below the copy; capped so it never outgrows the window */
-.browser { position: relative; width: min(100%, 1240px); margin: 10vh auto 0; border: 1px solid #000; background: #fff; }
+/* Right column, below the project in short */
+.browser { grid-column: 2; grid-row: 3; position: relative; width: 100%; margin: 3.4vh 0 0; border: 1px solid #000; background: #fff; }
 .browser .bar { display: flex; align-items: center; gap: .8em; padding: .6em .9em; border-bottom: 1px solid #000; font-size: var(--small); background: var(--page); }
 .browser .dots { display: flex; gap: .35em; }
 .browser .dots i { width: .75em; height: .75em; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .18); }
@@ -43,8 +46,10 @@ a:hover { text-decoration-thickness: 2px; }
 @media (max-width: 860px) {
   :root { --gutter: 18px; }
   .site-head nav { gap: 1.2em; }
-  .info { grid-template-columns: 1fr; gap: 2vh; }
-  .info .back { margin-bottom: 4vh; }
+  .project { grid-template-columns: 1fr; row-gap: 2vh; }
+  .head { position: static; grid-row: auto; }
+  .blurb, .case, .browser { grid-column: 1; grid-row: auto; }
+  .head .back { margin-bottom: 4vh; }
 }
 
 /* Top-left ZC mark (same as the home page, turning with the scroll) */
@@ -52,11 +57,11 @@ a:hover { text-decoration-thickness: 2px; }
 .brand-mark .zc { display: block; height: 2.4em; width: auto; overflow: visible; }
 
 /* Project strip: all four projects, arrows at either edge of the page */
-.more { position: sticky; bottom: 0; z-index: 5; background: var(--page); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2vw; padding: 2vh var(--gutter) var(--gutter); }
+.more { position: sticky; bottom: 0; z-index: 5; background: var(--page); display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 2vw; padding: 1.4vh var(--gutter) var(--gutter); }
 .arrow { font-size: clamp(30px, 3.4vw, 64px); line-height: 1; text-decoration: none; padding: .1em .25em; transition: transform .25s ease; }
 .arrow:first-child:hover { transform: translateX(-.15em); }
 .arrow:last-child:hover { transform: translateX(.15em); }
-.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vw; width: 100%; max-width: 780px; margin: 0 auto; }
+.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vw; width: 100%; max-width: 600px; margin: 0 auto; }
 .tile { display: block; aspect-ratio: 2 / 1; padding: .2em; text-decoration: none; opacity: .6; transition: opacity .25s; }
 .logo { display: block; width: 100%; height: 100%; background: var(--logo) center / contain no-repeat; }
 .tile:hover, .tile[aria-current="page"] { opacity: 1; }
@@ -64,15 +69,15 @@ a:hover { text-decoration-thickness: 2px; }
 /* Arriving: content rises in and the strip slides up from the bottom. Moving between projects slides the page sideways (see transition.js). */
 @keyframes rise { from { opacity: 0; transform: translateY(26px); } }
 @keyframes slide-up { from { transform: translateY(110%); } }
-.info { animation: rise .8s cubic-bezier(.2, .7, .2, 1) .15s backwards; }
+.head, .blurb, .case { animation: rise .8s cubic-bezier(.2, .7, .2, 1) .15s backwards; }
 .browser { animation: rise .9s cubic-bezier(.2, .7, .2, 1) .3s backwards; }
 .more { animation: slide-up .9s cubic-bezier(.2, .7, .2, 1) .45s backwards; }
 /* In the transition preview everything must be in place well before the C has finished growing. */
-.in-iris .info { animation-duration: .5s; animation-delay: 0s; }
+.in-iris .head, .in-iris .blurb, .in-iris .case { animation-duration: .5s; animation-delay: 0s; }
 .in-iris .browser { animation-duration: .55s; animation-delay: .06s; }
 .in-iris .more { animation-duration: .55s; animation-delay: .12s; }
-.no-enter .info, .no-enter .browser, .no-enter .more { animation: none; }
-@media (prefers-reduced-motion: reduce) { .info, .browser, .more { animation: none; } }
+.no-enter .head, .no-enter .blurb, .no-enter .case, .no-enter .browser, .no-enter .more { animation: none; }
+@media (prefers-reduced-motion: reduce) { .head, .blurb, .case, .browser, .more { animation: none; } }
 @media (max-width: 860px) {
   .more { gap: 8px; }
   .tiles { gap: 8px; }
@@ -92,18 +97,24 @@ a:hover { text-decoration-thickness: 2px; }
   .shot { display: block; position: absolute; inset: 0; }
 }
 
-/* The project in short */
-.case { margin-top: 10vh; font-size: var(--small); line-height: 1.6; }
-.case-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3vw; margin: 4vh 0 8vh; }
-.case-cols .label { margin: 0 0 .8em; }
-.case p { margin: 0; max-width: 32em; }
-.label { margin: 0; font-weight: 700; font-size: var(--small); }
+/* The project in short: same column and type size as the paragraphs above it */
+.case { grid-column: 2; grid-row: 2; margin-top: 2.4vh; font-size: var(--body); line-height: 1.6; }
+.case-cols { display: grid; gap: .7em; margin: .7em 0 0; }
+.case-cols > div { display: grid; grid-template-columns: 9em minmax(0, 1fr); gap: 1em; }
+.case p { margin: 0; }
+.label { margin: 0; font-weight: 700; font-size: var(--body); }
 @media (max-width: 860px) {
-  :root { --small: 15px; }
-  .case { margin-top: 6vh; }
-  .case-cols { grid-template-columns: 1fr; gap: 24px; }
+  :root { --small: 15px; --body: 15px; }
+  .case { margin-top: 4vh; }
+  .case-cols > div { grid-template-columns: 1fr; gap: .2em; }
   .site-head nav { gap: .8em; }
-  .info .blurb p { font-size: 15px; }
-  .browser { margin-top: 6vh; }
+  .browser { margin-top: 4vh; }
 }
 @media (hover: none) { .arrow:hover, .arrow:first-child:hover, .arrow:last-child:hover { transform: none; } }
+
+/* Phones and narrow windows: one column, in reading order (kept last so it beats the desktop placement above) */
+@media (max-width: 860px) {
+  .project { grid-template-columns: 1fr; row-gap: 2vh; }
+  .head { position: static; grid-column: 1; grid-row: auto; }
+  .blurb, .case, .browser { grid-column: 1; grid-row: auto; }
+}

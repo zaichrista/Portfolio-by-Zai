@@ -155,15 +155,15 @@ a { color: inherit; text-decoration: none; }
 .thumb { display: none; width: 56px; height: 56px; object-fit: contain; object-position: left center; }
 
 /* The plain scrolling page (phones, tablets, reduced motion) */
-.reduced .site-head { position: absolute; }
-.reduced .stage { height: 100vh; height: 100svh; }
-.reduced .flow-mask { margin-top: 100vh; margin-top: 100svh; }
-.reduced .work { padding: 12vh 0 14vh; }
-.reduced .about { height: auto; padding: 14vh 0; }
-.reduced .statement { margin: 4vh 0 8vh; }
-.reduced .cv { padding: 14vh 0; }
-.reduced .foot { min-height: 80vh; min-height: 80svh; }
-.reduced .rows:hover .row { opacity: 1; }
+.static .site-head { position: absolute; }
+.static .stage { height: 100vh; height: 100svh; }
+.static .flow-mask { margin-top: 100vh; margin-top: 100svh; }
+.static .work { padding: 12vh 0 14vh; }
+.static .about { height: auto; padding: 14vh 0; }
+.static .statement { margin: 4vh 0 8vh; }
+.static .cv { padding: 14vh 0; }
+.static .foot { min-height: 80vh; min-height: 80svh; }
+.static .rows:hover .row { opacity: 1; }
 @media (hover: none) { .thumb { display: block; } .row { grid-template-columns: auto 1fr auto; } }
 @media (max-width: 860px) {
   .row { grid-template-columns: auto 1fr; align-items: center; }
@@ -172,11 +172,24 @@ a { color: inherit; text-decoration: none; }
   .role { grid-column: 2; }
   .more { display: none; }
   .lockup { width: 88vw; }
-  .reduced .cv-cols p { margin-bottom: 1.6em; }
-  .reduced .cv-cols p + .label { margin-top: 2em; }
-  .reduced .stats { margin-bottom: 8vh; }
-  .reduced .cv .bio { margin: 4vh 0 8vh; }
+  .static .cv-cols p { margin-bottom: 1.6em; }
+  .static .cv-cols p + .label { margin-top: 2em; }
+  .static .stats { margin-bottom: 8vh; }
+  .static .cv .bio { margin: 4vh 0 8vh; }
   .hire-link { font-size: 17vw; }
   .site-head nav { gap: .9em; }
 }
 .note.email { margin: 0 0 1.2em; }
+
+/* Wrapper has no box of its own on desktop */
+.hero-wrap { display: contents; }
+
+/* Phones and tablets: the C zooms while the stage is pinned, then the page scrolls normally over one fixed colour layer
+   whose colour fades from section to section (see initLite). */
+.lite .hero-wrap { display: block; position: relative; z-index: 1; height: 200vh; height: 200svh; }
+.lite .stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.lite .lockup-wrap { will-change: transform; }
+.lite .scroll-space { display: none; }
+.lite .bg { position: fixed; inset: 0; z-index: 0; opacity: 0; }
+.lite .flow-mask { position: relative; inset: auto; z-index: 1; margin-top: 0; opacity: 1; pointer-events: auto; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+.lite .work { padding-top: 6vh; }

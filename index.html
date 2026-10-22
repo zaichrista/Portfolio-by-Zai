@@ -8,10 +8,14 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="apple-touch-icon.png">
   <title>Zaira Christa — Brand-led Web Designer and Strategist</title>
   <link rel="preload" href="fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=4">
+  <link rel="stylesheet" href="home.css?v=5">
   <script>
-    // Phones, tablets and anyone who asks for less motion get a plain scrolling page: the scroll-driven zoom is heavy on touch devices.
-    try { if (matchMedia('(prefers-reduced-motion: reduce), (max-width: 860px), (hover: none) and (pointer: coarse)').matches) document.documentElement.classList.add('reduced'); } catch (e) {}
+    // Reduced motion gets a plain page. Phones and tablets get a light version of the scroll animation (see initLite).
+    try {
+      var c = document.documentElement.classList;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) c.add('reduced', 'static');
+      else if (matchMedia('(max-width: 860px), (hover: none) and (pointer: coarse)').matches) c.add('lite', 'static');
+    } catch (e) {}
   </script>
 </head>
 <body>
@@ -27,6 +31,7 @@
   <p class="hint" id="hint" aria-hidden="true">(keep going)</p>
   <p class="nudge" id="nudge" aria-hidden="true">(scroll)<span class="or">or don't :)</span></p>
 
+  <div class="hero-wrap">
   <main class="stage">
     <div class="lockup-wrap">
     <svg class="lockup" viewBox="540 345 920 560" role="img" aria-label="ZC">
@@ -43,6 +48,7 @@
     <div id="subfade"><p class="sub">brand-led web designer and strategist</p></div>
     </div>
   </main>
+  </div>
   <div class="bg" id="bg" aria-hidden="true"></div>
   <div class="flow-mask" id="flowMask">
     <div class="flow" id="flow">
@@ -423,7 +429,52 @@
       })(performance.now());
     }
 
-    initScroll();
+    // Phones and tablets: the same idea as the desktop scroll (the C turns and grows until its blue fills the window,
+    // then the page colour fades from section to section), built so the browser only ever moves two things:
+    // a transform on the logo and the colour of one fixed layer. No clipping, no masks, no measuring while scrolling.
+    function initLite() {
+      var wrap = document.querySelector('.lockup-wrap'), disc = document.getElementById('disc');
+      var zfade = document.getElementById('zfade'), subfade = document.getElementById('subfade');
+      var bg = document.getElementById('bg'), stage = document.querySelector('.stage'), nudge = document.getElementById('nudge');
+      var sections = ['about', 'cv'].map(function (id) { return document.getElementById(id); }).concat(document.querySelector('.foot'));
+      var SKY = [135, 206, 235], STOPS = [[247, 212, 214], [255, 214, 176], [208, 234, 200]];   // blush, orange, green
+      var VIEW_W = 920, C_INNER_R = 183, C_OFFSET_X = 1197 - 1000;
+      var unit, maxScale, range, vh, tops = [], ticking = false, lastCol = '';
+      function clamp01(x) { return Math.max(0, Math.min(1, x)); }
+      function smooth(a, b, x) { var t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); }
+      function measure() {
+        var w = stage.clientWidth; vh = stage.clientHeight;   // the stage is 100svh, so this doesn't shift as the address bar moves
+        unit = wrap.offsetWidth / VIEW_W;
+        maxScale = 1.1 * Math.hypot(w, vh) / 2 / (C_INNER_R * unit);
+        range = vh * .9;
+        tops = sections.map(function (e) { return e.getBoundingClientRect().top + window.scrollY; });
+      }
+      function frame() {
+        ticking = false;
+        var y = window.scrollY, p = clamp01(y / range);
+        setAngle(-y * .1);
+        wrap.style.transform = 'translate(' + (-C_OFFSET_X * unit * smooth(0, .55, p)) + 'px,0) scale(' + Math.exp(Math.log(maxScale) * Math.pow(p, 1.7)) + ')';
+        disc.setAttribute('opacity', smooth(.08, .6, p));
+        var t = 1 - smooth(0, .3, p);
+        zfade.setAttribute('opacity', t); subfade.style.opacity = t;
+        nudge.classList.toggle('show', y < 8);
+        var col = SKY;
+        STOPS.forEach(function (c, i) {
+          var k = smooth(tops[i] - vh * .9, tops[i] - vh * .1, y);
+          col = col.map(function (v, j) { return v + (c[j] - v) * k; });
+        });
+        var css = 'rgb(' + col.map(Math.round).join(',') + ')';
+        if (css !== lastCol) { bg.style.backgroundColor = css; lastCol = css; }
+        bg.style.opacity = smooth(.85, 1, p);
+      }
+      function request() { if (!ticking) { ticking = true; requestAnimationFrame(frame); } }
+      measure(); frame();
+      window.addEventListener('scroll', request, { passive: true });
+      window.addEventListener('resize', function () { measure(); request(); });
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { measure(); request(); });
+    }
+
+    if (root.classList.contains('lite')) initLite(); else initScroll();
   })();
   </script>
   <script src="transition.js"></script>
