@@ -120,3 +120,6 @@ a:hover { text-decoration-thickness: 2px; }
   .head { order: 1; } .case { order: 2; } .blurb { order: 3; } .browser { order: 4; position: relative; top: auto; }   /* top: auto cancels the desktop pin offset, which was pushing it down past the page end */
   .project { padding-bottom: 4vh; }
 }
+
+/* Five nav items need to fit a phone */
+@media (max-width: 480px) { .site-head { font-size: 13px; } .site-head nav { gap: .5em; } }

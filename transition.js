@@ -260,12 +260,12 @@
 
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
-    if (!a || busy || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button || a.target === '_blank') return;
+    if (!a || busy || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button || a.target === '_blank' || a.hasAttribute('download')) return;
     if (a.hasAttribute('data-slide') && document.querySelector('.pages')) { e.preventDefault(); slide(a); return; }
     if (a.hasAttribute('data-iris')) { e.preventDefault(); if (LIGHT) irisLite(a, e); else iris(a, e); return; }
     if (LIGHT) return;
     var u = new URL(a.href, location.href);
-    if (document.querySelector('.more') && u.origin === location.origin && !/(the-reach-riverside|the-reach-catering|mandaloun|zc-studios)\.html$/.test(u.pathname)) {
+    if (document.querySelector('.more, .research-page') && u.origin === location.origin && !/(the-reach-riverside|the-reach-catering|mandaloun|zc-studios)\.html$/.test(u.pathname)) {
       e.preventDefault();
       if (!u.hash || u.hash === '#') homeZoom(a); else zoomOut(a, e);   // home lands as the logo; the other sections zoom out to the click
     }

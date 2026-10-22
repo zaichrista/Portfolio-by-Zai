@@ -1,20 +1,25 @@
-// Holds each page behind a cover until everything on it has loaded, so nothing pops in or shifts.
-// First page of a visit: the ring (the C of ZC) spins beside a 000% counter that follows the real loading.
+// Holds the home page behind a cover until everything on it has loaded, so nothing pops in or shifts.
+// The ring (the C of ZC) spins beside a 000% counter that follows the real loading.
 // At 100 the ring slows to a stop with its gap facing right, exactly where the home page's C sits, and the cover lifts.
-// Later pages in the same visit are mostly cached, so they get a plain cover with no ring.
-// Skipped inside the transition previews (iframes) and right after a transition, when the page is already loaded.
+// Only the start of the website: the home page, when it is opened fresh (typed, linked from elsewhere, or reloaded).
+// Never on other pages, inside the transition previews (iframes), or when arriving from a page on this site.
 (function () {
   var root = document.documentElement, me = document.currentScript;
   if (window.top !== window || root.classList.contains('no-enter')) return;
+  if (!/(^|\/)(index\.html)?$/.test(location.pathname)) return;   // home page only
+  try {
+    var nav = performance.getEntriesByType('navigation')[0], type = nav && nav.type;
+    var fromHere = document.referrer && new URL(document.referrer).origin === location.origin;
+    if (type === 'back_forward' || (fromHere && type !== 'reload')) return;   // moving around the site, not arriving at it
+  } catch (e) {}
   var IFRAME_MS = 12000;   // the live preview is someone else's site: give it this long, then show the still image over it
   var MAX_MS = 30000;      // last-resort failsafe only, so a broken connection can't leave a blank page forever
   var COUNT_MS = 1400;     // fastest the counter may run 0 to 100, so it is readable even when everything is cached
   var V0 = 0.36;           // ring speed in deg/ms, constant until 100 and the speed the slow-down starts from
   var MIN_EXTRA = 90;      // least extra turn after 100 before the gap lands facing right
   var bg = (me && me.getAttribute('data-bg')) || '#fff';
-  var reduce = false, full = true;
+  var reduce = false;
   try { reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
-  try { full = !sessionStorage.getItem('zc-loaded'); } catch (e) {}
 
   var css = document.createElement('style');
   css.textContent =
@@ -28,25 +33,18 @@
     '#zc-loader text{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;font-size:72px;' +
     'font-variant-numeric:tabular-nums;opacity:0;transition:opacity .3s ease}' +
     '#zc-loader.ready text{opacity:1}' +
-    '#zc-loader p{position:fixed;left:0;right:0;top:50%;margin:0;text-align:center;opacity:0;' +
-    'font:clamp(14px,1.15vw,24px)/1 "IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;letter-spacing:.02em;' +
-    'animation:zc-load-in .3s ease .4s forwards}' +
-    '@keyframes zc-load-in{to{opacity:1}}';
+    '';
   document.head.appendChild(css);
   root.classList.add('loading');
 
   var cover = document.createElement('div');
   cover.id = 'zc-loader';
   cover.setAttribute('aria-hidden', 'true');
-  if (full) {
-    cover.innerHTML =
+  cover.innerHTML =
       '<svg viewBox="540 345 920 560"><defs><mask id="zc-gap" maskUnits="userSpaceOnUse" x="900" y="300" width="600" height="650">' +
       '<rect x="900" y="300" width="600" height="650" fill="#fff"/><rect x="1360" y="596.5" width="120" height="56" fill="#000"/></mask></defs>' +
       '<text id="zc-count" x="875" y="650" text-anchor="end" fill="#000">000%</text>' +
       '<g id="zc-ring"><circle cx="1197" cy="624.5" r="211" fill="none" stroke="#000" stroke-width="56" mask="url(#zc-gap)"/></g></svg>';
-  } else {
-    cover.innerHTML = '<p>(loading)</p>';
-  }
   root.appendChild(cover);
   var ring = document.getElementById('zc-ring'), count = document.getElementById('zc-count');
   function setAngle(a) { if (ring) ring.setAttribute('transform', 'rotate(' + a + ' 1197 624.5)'); }
@@ -65,7 +63,6 @@
   var finished = false;
   function finish() {
     if (finished) return; finished = true;
-    try { sessionStorage.setItem('zc-loaded', '1'); } catch (e) {}
     root.classList.remove('loading');
     cover.classList.add('out');
     // measuring scripts ran against the hidden page; tell them to measure again now it is showing

@@ -1,0 +1,25 @@
+/* Research pages. Built on project.css (same cream page, same two columns); this only changes what differs:
+   the right-hand frame is a scrolling PDF preview instead of a live website. */
+
+.head .full { margin: -.1em 0 2.2vh; font-size: var(--body); line-height: 1.5; max-width: 34em; }
+.visit { margin-right: .6em; }
+.size { opacity: .6; }
+
+/* the preview: pages stacked on a darker cream, scrolling inside the frame */
+.viewport.doc { aspect-ratio: auto; height: min(74vh, 900px); overflow-y: auto; overscroll-behavior: contain; background: #e4dcc6; padding: 1.2vw; scrollbar-width: thin; scrollbar-color: #000 transparent; }
+.viewport.doc img { display: block; width: 100%; height: auto; background: #fff; border: 1px solid rgba(0, 0, 0, .25); }
+.viewport.doc img + img { margin-top: 1.2vw; }
+.viewport.doc .end { margin: 1.4vw 0 .4vw; text-align: center; font-size: var(--small); line-height: 1.5; }
+.viewport.doc .end a { text-decoration: underline; }
+.browser .url { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* no project strip on these pages, so leave room at the bottom */
+.research-page { padding-bottom: 6vh; }
+
+@media (max-width: 860px) {
+  .project { grid-template-columns: minmax(0, 1fr); }
+  .viewport.doc { height: 70vh; padding: 10px; }
+  .viewport.doc img + img { margin-top: 10px; }
+  .viewport.doc .end { margin: 14px 0 4px; }
+  .research-page { padding-bottom: 6vh; }
+}
