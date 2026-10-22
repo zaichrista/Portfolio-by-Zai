@@ -169,7 +169,7 @@
       var nudge = document.getElementById('nudge');
       var lockup = document.querySelector('.lockup');
       var meltMax = 0;
-      var unit, maxScale, vh, zoomDone, zoomEnd, aboutTop, cvTop, footTop, aboutHold;
+      var unit, maxScale, vh, zoomDone, zoomEnd, aboutTop, cvTop, footTop, aboutHold, maxY = Infinity;
       var SKY = [135, 206, 235], BLUSH = [247, 212, 214], ORANGE = [255, 214, 176], GREEN = [208, 234, 200];
       function measure() {
         unit = wrap.offsetWidth / VIEW_W;  // px per viewBox unit (offsetWidth ignores transforms)
@@ -189,6 +189,7 @@
         nudge.style.top = Math.max(0, wrap.offsetTop - nudge.offsetHeight - vh * .04) + 'px';
         // last scroll position puts the bottom of the footer at the bottom of the window
         spacer.style.height = (zoomEnd + aboutHold + flow.offsetHeight) + 'px';
+        maxY = Math.max(0, zoomEnd + aboutHold + flow.offsetHeight - vh);   // the furthest the page can really scroll
       }
       measure();
       window.addEventListener('resize', measure);
@@ -366,9 +367,12 @@
       // Arriving from another page (e.g. index.html#cv): start at that section.
       var jump = { '#work': zoomEnd, '#about': zoomEnd + aboutTop, '#cv': zoomEnd + toRaw(cvTop) }[location.hash];
       if (jump !== undefined) { window.scrollTo(0, jump); current = jump; }
+      else current = Math.max(0, Math.min(maxY, window.scrollY));
+      var lastFrame = performance.now(), isOpen = false;
       (function frame(now) {
         var y, p, shift, homing = false, e = 0;
         idleStep(now, window.scrollY);
+        var dtMs = now - lastFrame; lastFrame = now;
         if (drive) {
           var t = clamp01((now - drive.t0) / drive.dur);
           e = ease(t);
@@ -378,8 +382,10 @@
           homing = drive.home;
           if (t >= 1) drive = null;
         } else {
-          y = window.scrollY;
-          current += (y - current) * FOLLOW;
+          // Safari's trackpad bounces past both ends; the page itself must not follow the bounce
+          y = Math.max(0, Math.min(maxY, window.scrollY));
+          // same easing at 60Hz and 120Hz screens
+          current += (y - current) * (1 - Math.pow(1 - FOLLOW, Math.min(4, dtMs / 16.67)));
           if (Math.abs(y - current) < 0.1) current = y;
         }
         if (homing) { p = drive ? drive.pStart * (1 - e) : 0; shift = drive ? drive.shift : 0; }
@@ -402,13 +408,16 @@
 
         // The colour layer and the work column are clipped to the C's blue circle, so the rows are already in
         // place while it opens, and going home they stay put at full strength and only leave as the blue does.
-        var r = disc.getBoundingClientRect();
+        // Once the blue fills the window the clip circle is bigger than the window, so it does nothing: drop it (and the
+        // per-frame measuring) while scrolling the long part of the page. Masked + clipped full-window layers are slow in Safari.
+        var open = p >= 1 && !homing;
+        var r = open ? null : disc.getBoundingClientRect();
         // The name in the corner becomes the small ZC mark while the black of the C is over it, so the swap is
         // hidden. It turns the same way the big C does: anti-clockwise going down, clockwise coming back up.
-        var midR = r.width / 2 * 211 / 185;   // radius of the middle of the ring
-        head.classList.toggle('swapped', Math.hypot(r.left + r.width / 2 - nameX, r.top + r.height / 2 - nameY) <= midR);
+        var midR = open ? 0 : r.width / 2 * 211 / 185;   // radius of the middle of the ring
+        head.classList.toggle('swapped', open || Math.hypot(r.left + r.width / 2 - nameX, r.top + r.height / 2 - nameY) <= midR);
         ring2.setAttribute('transform', 'rotate(' + (-current * DEG_PER_PX) + ' ' + CX + ' ' + CY + ')');
-        var clip = 'circle(' + (r.width / 2 * C_INNER_R / 185) + 'px at ' + (r.left + r.width / 2) + 'px ' + (r.top + r.height / 2) + 'px)';
+        var clip = open ? 'none' : 'circle(' + (r.width / 2 * C_INNER_R / 185) + 'px at ' + (r.left + r.width / 2) + 'px ' + (r.top + r.height / 2) + 'px)';
         // Opening: the rows fade in once the disc is fully blue (p = .6). Going home they stay full strength
         // and only go as the blue goes.
         var on = homing ? smooth(.08, .6, p) : smooth(.6, .75, p);
@@ -418,7 +427,8 @@
           var k = smooth(st[0] - vh * .9, st[0] - vh * .1, shift);
           col = col.map(function (c, i) { return c + (st[1][i] - c) * k; });
         });
-        bg.style.clipPath = mask.style.clipPath = clip;
+        if (!open || !isOpen) bg.style.clipPath = mask.style.clipPath = clip;
+        isOpen = open;
         bg.style.opacity = mask.style.opacity = on;
         bg.style.backgroundColor = 'rgb(' + col.map(Math.round).join(',') + ')';
         mask.style.pointerEvents = p >= .97 ? 'auto' : 'none';
