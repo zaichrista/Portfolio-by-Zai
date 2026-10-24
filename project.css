@@ -61,7 +61,7 @@ a:hover { text-decoration-thickness: 2px; }
 .arrow { font-size: clamp(26px, 2.6vw, 48px); line-height: 1; text-decoration: none; padding: .1em .25em; transition: transform .25s ease; }
 .arrow:first-child:hover { transform: translateX(-.15em); }
 .arrow:last-child:hover { transform: translateX(.15em); }
-.tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1vw; width: 100%; max-width: 480px; margin: 0 auto; }
+.tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1vw; width: 100%; max-width: 600px; margin: 0 auto; }
 .tile { display: block; aspect-ratio: 2 / 1; padding: .2em; text-decoration: none; opacity: .6; transition: opacity .25s; }
 .logo { display: block; width: 100%; height: 100%; background: var(--logo) center / contain no-repeat; }
 .tile:hover, .tile[aria-current="page"] { opacity: 1; }
@@ -133,3 +133,12 @@ a:hover { text-decoration-thickness: 2px; }
 .brand-sheet img { display: block; width: 100%; height: auto; border: 1px solid #000; background: #fff; }
 .brand-sheet figcaption { margin-top: .5em; font-size: calc(var(--body) * .85); line-height: 1.3; }
 @media (max-width: 860px) { .project:has(.brand-sheet) .browser { grid-row: auto; } .brand-sheet { order: 5; grid-row: auto; margin-top: 4vh; grid-template-columns: minmax(0, 1fr); } }
+
+/* Fashion label page: a press and numbers panel stands in for the website preview */
+.press { grid-column: 2; grid-row: 1 / span 3; position: sticky; top: 11vh; align-self: start; border: 1px solid #000; padding: 1.6em; font-size: var(--small); line-height: 1.5; animation: rise .9s cubic-bezier(.2, .7, .2, 1) .3s backwards; }
+.press ul { list-style: none; margin: .8em 0 2em; padding: 0; display: grid; gap: .9em; }
+.press ul:last-child { margin-bottom: 0; }
+.press li { display: grid; grid-template-columns: 11em 1fr; gap: 1em; }
+.press li b { font-weight: 500; }
+.no-enter .press, .in-iris .press { animation: none; }
+@media (max-width: 860px) { .press { grid-column: 1; grid-row: auto; position: relative; top: auto; order: 4; margin-top: 4vh; } .press li { grid-template-columns: 8em 1fr; } }

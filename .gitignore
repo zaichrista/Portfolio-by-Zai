@@ -1,1 +1,6 @@
 .DS_Store
+
+# local env (pulled from Wix)
+.env.local
+.env
+dist/
