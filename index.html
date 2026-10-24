@@ -13,7 +13,7 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Zaira Christa", "url": "https://www.zairachrista.com/"}</script>
   <title>Zaira Christa — Brand Strategist and Designer</title>
   <link rel="preload" href="fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=11">
+  <link rel="stylesheet" href="home.css?v=15">
   <script>
     // Reduced motion gets a plain page. Phones and tablets get a light version of the scroll animation (see initLite).
     try {
@@ -31,7 +31,7 @@
       <polygon fill="#000" points="592,395 881,395 651,801 889,801 889,854 562,854 790,449 592,449"/>
       <g id="ring2"><circle cx="1197" cy="624.5" r="211" fill="none" stroke="#000" stroke-width="56" mask="url(#gap2)"/></g>
     </svg></a>
-    <nav aria-label="Main navigation"><a href="index.html" data-go="home">home</a><span aria-hidden="true">,</span><a href="index.html#work" data-go="work">work</a><span aria-hidden="true">,</span><a href="index.html#research" data-go="research">research</a><span aria-hidden="true">,</span><a href="index.html#about" data-go="about">about</a><span aria-hidden="true">,</span><a href="index.html#cv" data-go="cv">CV</a></nav>
+    <nav aria-label="Main navigation"><a href="index.html" data-go="home">home</a><span aria-hidden="true">,</span><a href="index.html#work" data-go="work">work</a><span aria-hidden="true">,</span><a href="index.html#about" data-go="about">about</a><span aria-hidden="true">,</span><a href="index.html#cv" data-go="cv">CV</a></nav>
   </header>
 
   <p class="hint" id="hint" aria-hidden="true">(keep going)</p>
@@ -58,18 +58,25 @@
   <div class="bg" id="bg" aria-hidden="true"></div>
   <div class="flow-mask" id="flowMask">
     <div class="flow" id="flow">
+      <div class="works">
       <section class="work" id="work" aria-labelledby="work-h">
-        <h2 class="label" id="work-h">work <span>(05)</span></h2>
+        <h2 class="label" id="work-h">strategy <span>(04)</span></h2>
         <ol class="rows">
       <li><a class="row" href="the-reach-riverside.html" data-iris data-logo="logos/the-reach-riverside.png"><img class="thumb" src="logos/the-reach-riverside.png" alt="" width="64" height="64"><span class="brand">THE REACH RIVERSIDE</span><span class="role">Lead brand designer + strategist</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
       <li><a class="row" href="the-reach-catering.html" data-iris data-logo="logos/the-reach-catering.png"><img class="thumb" src="logos/the-reach-catering.png" alt="" width="64" height="64"><span class="brand">THE REACH CATERING</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
       <li><a class="row" href="mandaloun.html" data-iris data-logo="logos/mandaloun.png"><img class="thumb" src="logos/mandaloun.png" alt="" width="64" height="64"><span class="brand">MANDALOUN</span><span class="role">Website designer</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
       <li><a class="row" href="zc-studios.html" data-iris data-logo="logos/zc-studios.png"><img class="thumb" src="logos/zc-studios.png" alt="" width="64" height="64"><span class="brand">ZC STUDIOS</span><span class="role">Founder + creative lead</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
-      <li><a class="row" href="zaira-christa/index.html" data-iris data-logo="logos/zaira-christa.png"><img class="thumb" src="logos/zaira-christa.png" alt="" width="64" height="64"><span class="brand">ZAIRA CHRISTA</span><span class="role">Founder + creative director</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
         </ol>
       </section>
 
-      <!-- On the desktop scroll this sits to the right of the work list: the page pans sideways to it, then carries on downwards. -->
+      <section class="work fashion" id="fashion" aria-labelledby="fashion-h">
+        <h2 class="label" id="fashion-h">fashion &amp; design <span>(02)</span></h2>
+        <ol class="rows">
+      <li><a class="row" href="zaira-christa/index.html" data-iris data-logo="logos/zaira-christa.png"><img class="thumb" src="logos/zaira-christa.png" alt="" width="64" height="64"><span class="brand">ZAIRA CHRISTA</span><span class="role">Founder + creative director</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
+      <li><span class="row soon"><span class="brand">OXFORD FASHION GALA</span><span class="role">Coming soon</span><span class="more"></span></span></li>
+        </ol>
+      </section>
+
       <section class="work research" id="research" aria-labelledby="research-h">
         <h2 class="label" id="research-h">research <span>(03)</span></h2>
         <ol class="rows">
@@ -78,7 +85,9 @@
       <li><a class="row" href="sonic-intangibility.html" data-iris><span class="brand">SONIC INTANGIBILITY</span><span class="role">2025</span><span class="more">Learn more <span aria-hidden="true">↗</span></span></a></li>
         </ol>
       </section>
+      </div>
 
+      <div class="after" id="after">
       <section class="about" id="about" aria-labelledby="about-h">
         <h2 class="label" id="about-h">about</h2>
         <p class="statement">I'm a brand strategist, with design as the way I make it real, sharpening my taste and learning to turn what a brand is really saying into something cohesive and memorable.</p>
@@ -136,6 +145,7 @@
           <nav aria-label="Elsewhere"><a href="https://linkedin.com/in/zairachrista">LinkedIn</a></nav>
         </div>
       </footer>
+      </div>
     </div>
   </div>
   <div class="scroll-space" id="spacer" aria-hidden="true"></div>
@@ -156,7 +166,7 @@
     var RANGE_VH = 1.5;                  // scroll distance (in window heights) over which the zoom plays
     var ABOUT_HOLD_VH = 0;               // extra scrolling the about section stays centred for (0 = not sticky)
     var HOLD_VH = .3;                    // extra distance the work list stays put, so a hard scroll up doesn't start closing the C
-    var PAN_VH = 1;                      // scroll distance (in window heights) over which the page slides sideways from work to research
+    var PAN_VH = 1;                      // scroll distance (in window heights) over which the page slides sideways from research to about
     var VIEW_W = 920, C_INNER_R = 183, C_OFFSET_X = 1197 - 1000;  // lockup viewBox units
     function clamp01(x) { return Math.max(0, Math.min(1, x)); }
     function smooth(a, b, x) { var t = clamp01((x - a) / (b - a)); return t * t * (3 - 2 * t); }
@@ -171,6 +181,10 @@
       var bg = document.getElementById('bg');
       var mask = document.getElementById('flowMask');
       var flow = document.getElementById('flow');
+      var works = document.querySelector('.works');
+      var after = document.getElementById('after');
+      var fashion = document.getElementById('fashion');
+      var research = document.getElementById('research');
       var about = document.getElementById('about');
       var cv = document.getElementById('cv');
       var foot = document.querySelector('.foot');
@@ -187,8 +201,8 @@
       var nudge = document.getElementById('nudge');
       var lockup = document.querySelector('.lockup');
       var meltMax = 0;
-      var unit, maxScale, vh, vw, zoomDone, zoomEnd, panEnd, aboutTop, cvTop, footTop, aboutHold, maxY = Infinity;
-      var SKY = [135, 206, 235], RESEARCH = [243, 166, 170], BLUSH = [247, 212, 214], ORANGE = [255, 214, 176], GREEN = [208, 234, 200];
+      var unit, maxScale, vh, vw, zoomDone, zoomEnd, panStart, panEnd, worksMax, afterH, fashionTop, researchTop, aboutTop, cvTop, footTop, aboutHold, maxY = Infinity;
+      var SKY = [135, 206, 235], RESEARCH = [243, 166, 170], YELLOW = [255, 243, 176], BLUSH = [247, 212, 214], ORANGE = [255, 214, 176], GREEN = [208, 234, 200];
       function measure() {
         unit = wrap.offsetWidth / VIEW_W;  // px per viewBox unit (offsetWidth ignores transforms)
         // big enough that the C's inner edge sits beyond the window corners
@@ -196,9 +210,15 @@
         vh = window.innerHeight;
         zoomDone = vh * RANGE_VH;          // scrollY at which the blue fills the window
         zoomEnd = vh * (RANGE_VH + HOLD_VH); // scrollY at which the work list starts moving; in between everything holds still
-        panEnd = zoomEnd + vh * PAN_VH;      // scrollY at which research is centred; from here the column scrolls upwards
-        vw = mask.clientWidth;               // how far the column slides sideways; research and everything below it sit this far to the right
+        worksMax = Math.max(0, works.offsetHeight - vh);   // how far the strategy / fashion / research column scrolls up
+        panStart = zoomEnd + worksMax;       // scrollY at which the end of research is in view and the sideways slide begins
+        panEnd = panStart + vh * PAN_VH;     // scrollY at which about is in view; from here it scrolls upwards
+        vw = mask.clientWidth;               // how far the column slides sideways; about, CV and the footer sit this far to the right
         flow.style.setProperty('--pan', vw + 'px');
+        after.style.top = worksMax + 'px';   // about starts at the top of the window once the slide has finished
+        fashionTop = fashion.offsetTop;
+        researchTop = research.offsetTop;
+        afterH = after.offsetHeight;
         aboutTop = about.offsetTop;
         cvTop = cv.offsetTop;
         footTop = foot.offsetTop;
@@ -213,8 +233,8 @@
         meltMax = Math.max(0, (vh * 1.5 - (vh - wrap.offsetHeight) / 2) / unit - (801 - 345));
         nudge.style.top = Math.max(0, wrap.offsetTop - nudge.offsetHeight - vh * .04) + 'px';
         // last scroll position puts the bottom of the footer at the bottom of the window
-        spacer.style.height = (panEnd + aboutHold + flow.offsetHeight) + 'px';
-        maxY = Math.max(0, panEnd + aboutHold + flow.offsetHeight - vh);   // the furthest the page can really scroll
+        spacer.style.height = (panEnd + aboutHold + afterH) + 'px';
+        maxY = Math.max(0, panEnd + aboutHold + afterH - vh);   // the furthest the page can really scroll
       }
       measure();
       window.addEventListener('resize', measure);
@@ -229,13 +249,15 @@
       var drive = null;
       function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
       // how far across to research we are (0 = work list in view, 1 = research in view)
-      function panAt(y) { return smooth(0, 1, (y - zoomEnd) / (panEnd - zoomEnd)); }
+      function panAt(y) { return smooth(0, 1, (y - panStart) / (panEnd - panStart)); }
+      // how far the column has moved up: through strategy, fashion and research, a pause for the slide, then up through about, CV and the footer
+      function vShift(y) { return y <= panStart ? Math.max(0, y - zoomEnd) : worksMax + toShift(Math.max(0, y - panEnd)); }
       function go(to, home) {
         var from = window.scrollY;
         if (Math.abs(to - from) < 2) return;
         drive = { from: from, to: to, t0: performance.now(), home: home,
                   dur: Math.min(3600, 1100 + Math.abs(to - from) * 0.22),
-                  shift: toShift(Math.max(0, from - panEnd)), pan: panAt(from), pStart: clamp01(from / zoomDone) };
+                  shift: vShift(from), pan: panAt(from), pStart: clamp01(from / zoomDone) };
       }
       function stop() { drive = null; }
       ['wheel', 'touchstart', 'keydown'].forEach(function (n) { window.addEventListener(n, stop, { passive: true }); });
@@ -245,7 +267,7 @@
         if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
         e.preventDefault();
         var where = a.getAttribute('data-go');
-        go(where === 'home' ? 0 : where === 'work' ? zoomEnd : where === 'research' ? panEnd : where === 'about' ? panEnd + aboutTop + aboutHold / 2 : panEnd + toRaw(cvTop), where === 'home');
+        go(where === 'home' ? 0 : where === 'work' ? zoomEnd : where === 'about' ? panEnd + aboutTop + aboutHold / 2 : panEnd + toRaw(cvTop), where === 'home');
       });
 
       // Tabbing to a link off-screen would scroll the clipped window natively; scroll the page instead.
@@ -253,12 +275,8 @@
       mask.addEventListener('focusin', function (e) {
         mask.scrollTop = 0; mask.scrollLeft = 0;
         if (!e.target.matches(':focus-visible')) return;   // a mouse click on a link must open it, not scroll first
-        var inResearch = e.target.closest('.research');
-        if (inResearch) { go(panEnd, false); return; }
-        if (e.target.closest('.work')) { go(zoomEnd, false); return; }
-        var shift = toShift(Math.max(0, window.scrollY - panEnd));
-        var top = e.target.getBoundingClientRect().top + shift;
-        go(panEnd + toRaw(Math.max(0, top - vh * .4)), false);
+        var top = e.target.getBoundingClientRect().top + vShift(window.scrollY) - (e.target.closest('.after') ? worksMax : 0);
+        go(e.target.closest('.after') ? panEnd + toRaw(Math.max(0, top - vh * .4)) : zoomEnd + Math.min(worksMax, Math.max(0, top - vh * .4)), false);
       });
 
       var current = 0;
@@ -398,7 +416,7 @@
       }
 
       // Arriving from another page (e.g. index.html#cv): start at that section.
-      var jump = { '#work': zoomEnd, '#research': panEnd, '#about': panEnd + aboutTop, '#cv': panEnd + toRaw(cvTop) }[location.hash];
+      var jump = { '#work': zoomEnd, '#fashion': zoomEnd + Math.min(worksMax, Math.max(0, fashionTop - vh * .19)), '#research': zoomEnd + Math.min(worksMax, Math.max(0, researchTop - vh * .19)), '#about': panEnd + aboutTop, '#cv': panEnd + toRaw(cvTop) }[location.hash];
       if (jump !== undefined) { window.scrollTo(0, jump); current = jump; }
       else current = Math.max(0, Math.min(maxY, window.scrollY));
       var lastFrame = performance.now();
@@ -426,7 +444,7 @@
           if (Math.abs(y - current) < 0.1) current = y;
         }
         if (homing) { p = drive ? drive.pStart * (1 - e) : 0; shift = drive ? drive.shift : 0; pan = drive ? drive.pan : 0; }
-        else { p = clamp01(current / zoomDone); shift = toShift(Math.max(0, current - panEnd)); pan = panAt(current); }
+        else { p = clamp01(current / zoomDone); shift = vShift(current); pan = panAt(current); }
         if (Math.abs(y - current) > 0.5 || drive) lastMove = performance.now();
         // paused partway through: nudge them on. It sits under the C, so the C covers it as it grows.
         // once shown it stays (no fade-out) until the black of the C covers it, or we're back at the top
@@ -464,12 +482,16 @@
         // Opening: the rows fade in once the disc is fully blue (p = .6). Going home they stay full strength
         // and only go as the blue goes.
         var on = homing ? smooth(.08, .6, p) : smooth(.6, .75, p);
-        // each section's colour fades in as it arrives: blue (work) -> red blush (research, as the page slides across)
-        // -> blush (about) -> orange (CV) -> green (footer)
-        var col = SKY.map(function (c, i) { return c + (RESEARCH[i] - c) * pan; });
-        [[aboutTop, BLUSH], [cvTop, ORANGE], [footTop, GREEN]].forEach(function (st) {
-          var k = smooth(st[0] - vh * .9, st[0] - vh * .1, shift);
-          col = col.map(function (c, i) { return c + (st[1][i] - c) * k; });
+        // the backdrop fades slowly with the scroll: blue (strategy) -> pastel yellow (fashion, the middle of the fade) -> pastel red
+        // (research); as the page slides across to about it turns blush, then orange (CV) and green (footer) as they arrive
+        function mix(c1, c2, k) { return c1.map(function (c, i) { return c + (c2[i] - c) * k; }); }
+        var rowsY = Math.min(shift, worksMax);
+        var fMid = Math.max(1, Math.min(worksMax, fashionTop - vh * .15)), rMid = Math.max(fMid + 1, Math.min(worksMax, researchTop - vh * .15));
+        var col = mix(mix(SKY, YELLOW, smooth(0, fMid, rowsY)), RESEARCH, smooth(fMid, rMid, rowsY));
+        col = mix(col, BLUSH, pan);
+        var upY = Math.max(0, shift - worksMax);
+        [[cvTop, ORANGE], [footTop, GREEN]].forEach(function (st) {
+          col = mix(col, st[1], smooth(st[0] - vh * .9, st[0] - vh * .1, upY));
         });
         put('clip', clip, function (v) { bg.style.clipPath = mask.style.clipPath = v; });
         put('on', on, function (v) { bg.style.opacity = mask.style.opacity = v; });
@@ -491,8 +513,8 @@
       var wrap = document.querySelector('.lockup-wrap'), disc = document.getElementById('disc');
       var zfade = document.getElementById('zfade'), subfade = document.getElementById('subfade');
       var bg = document.getElementById('bg'), stage = document.querySelector('.stage'), nudge = document.getElementById('nudge'), list = document.getElementById('flowMask');
-      var sections = ['research', 'about', 'cv'].map(function (id) { return document.getElementById(id); }).concat(document.querySelector('.foot'));
-      var SKY = [135, 206, 235], STOPS = [[243, 166, 170], [247, 212, 214], [255, 214, 176], [208, 234, 200]];   // red blush, blush, orange, green
+      var sections = ['fashion', 'research', 'about', 'cv'].map(function (id) { return document.getElementById(id); }).concat(document.querySelector('.foot'));
+      var SKY = [135, 206, 235], STOPS = [[255, 243, 176], [243, 166, 170], [247, 212, 214], [255, 214, 176], [208, 234, 200]];   // red blush, blush, orange, green
       var VIEW_W = 920, C_INNER_R = 183, C_OFFSET_X = 1197 - 1000;
       var native = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'));
       var unit, maxScale, range, vh, total, tops = [], ticking = false, lastCol = '', styleEl = null;
