@@ -210,7 +210,11 @@
         vh = window.innerHeight;
         zoomDone = vh * RANGE_VH;          // scrollY at which the blue fills the window
         zoomEnd = vh * (RANGE_VH + HOLD_VH); // scrollY at which the work list starts moving; in between everything holds still
-        worksMax = Math.max(0, works.offsetHeight - vh);   // how far the strategy / fashion / research column scrolls up
+        // The sideways slide starts when research is centred in the window. The gap above research is made big enough that by then the
+        // line under the last fashion row has left the top of the window.
+        var rH = research.offsetHeight, centred = Math.max(0, (vh - rH) / 2);
+        research.style.marginTop = Math.max(vh * .14, centred + vh * .12) + 'px';
+        worksMax = Math.max(0, research.offsetTop - centred);   // how far the strategy / fashion / research column scrolls up
         panStart = zoomEnd + worksMax;       // scrollY at which the end of research is in view and the sideways slide begins
         panEnd = panStart + vh * PAN_VH;     // scrollY at which about is in view; from here it scrolls upwards
         vw = mask.clientWidth;               // how far the column slides sideways; about, CV and the footer sit this far to the right
