@@ -13,7 +13,7 @@
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebSite", "name": "Zaira Christa", "url": "https://www.zairachrista.com/"}</script>
   <title>Zaira Christa — Brand Strategist and Designer</title>
   <link rel="preload" href="fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="home.css?v=15">
+  <link rel="stylesheet" href="home.css?v=16">
   <script>
     // Reduced motion gets a plain page. Phones and tablets get a light version of the scroll animation (see initLite).
     try {
@@ -202,7 +202,7 @@
       var lockup = document.querySelector('.lockup');
       var meltMax = 0;
       var unit, maxScale, vh, vw, zoomDone, zoomEnd, panStart, panEnd, worksMax, afterH, fashionTop, researchTop, aboutTop, cvTop, footTop, aboutHold, maxY = Infinity;
-      var SKY = [135, 206, 235], RESEARCH = [243, 166, 170], YELLOW = [255, 243, 176], BLUSH = [247, 212, 214], ORANGE = [255, 214, 176], GREEN = [208, 234, 200];
+      var SKY = [135, 206, 235], RESEARCH = [243, 166, 170], BLUSH = [247, 212, 214], ORANGE = [255, 214, 176], GREEN = [208, 234, 200];
       function measure() {
         unit = wrap.offsetWidth / VIEW_W;  // px per viewBox unit (offsetWidth ignores transforms)
         // big enough that the C's inner edge sits beyond the window corners
@@ -482,12 +482,12 @@
         // Opening: the rows fade in once the disc is fully blue (p = .6). Going home they stay full strength
         // and only go as the blue goes.
         var on = homing ? smooth(.08, .6, p) : smooth(.6, .75, p);
-        // the backdrop fades slowly with the scroll: blue (strategy) -> pastel yellow (fashion, the middle of the fade) -> pastel red
-        // (research); as the page slides across to about it turns blush, then orange (CV) and green (footer) as they arrive
+        // the backdrop fades slowly with the scroll: blue (strategy) -> pastel red (research), halfway between the two at
+        // the fashion section; as the page slides across to about it turns blush, then orange (CV) and green (footer) as they arrive
         function mix(c1, c2, k) { return c1.map(function (c, i) { return c + (c2[i] - c) * k; }); }
         var rowsY = Math.min(shift, worksMax);
         var fMid = Math.max(1, Math.min(worksMax, fashionTop - vh * .15)), rMid = Math.max(fMid + 1, Math.min(worksMax, researchTop - vh * .15));
-        var col = mix(mix(SKY, YELLOW, smooth(0, fMid, rowsY)), RESEARCH, smooth(fMid, rMid, rowsY));
+        var col = mix(SKY, RESEARCH, .5 * smooth(0, fMid, rowsY) + .5 * smooth(fMid, rMid, rowsY));   // halfway between the two at the fashion section
         col = mix(col, BLUSH, pan);
         var upY = Math.max(0, shift - worksMax);
         [[cvTop, ORANGE], [footTop, GREEN]].forEach(function (st) {
@@ -514,7 +514,7 @@
       var zfade = document.getElementById('zfade'), subfade = document.getElementById('subfade');
       var bg = document.getElementById('bg'), stage = document.querySelector('.stage'), nudge = document.getElementById('nudge'), list = document.getElementById('flowMask');
       var sections = ['fashion', 'research', 'about', 'cv'].map(function (id) { return document.getElementById(id); }).concat(document.querySelector('.foot'));
-      var SKY = [135, 206, 235], STOPS = [[255, 243, 176], [243, 166, 170], [247, 212, 214], [255, 214, 176], [208, 234, 200]];   // red blush, blush, orange, green
+      var SKY = [135, 206, 235], STOPS = [[189, 186, 203], [243, 166, 170], [247, 212, 214], [255, 214, 176], [208, 234, 200]];   // red blush, blush, orange, green
       var VIEW_W = 920, C_INNER_R = 183, C_OFFSET_X = 1197 - 1000;
       var native = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'));
       var unit, maxScale, range, vh, total, tops = [], ticking = false, lastCol = '', styleEl = null;

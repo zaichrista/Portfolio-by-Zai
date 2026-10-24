@@ -146,7 +146,7 @@ html:not(.static) .after { position: absolute; left: var(--pan, 100vw); width: 1
 .reduced .flow-mask { position: relative; inset: auto; opacity: 1; pointer-events: auto; margin-top: 100vh; overflow: visible; -webkit-mask-image: none; mask-image: none; }
 .reduced .stage { position: absolute; height: 100vh; }
 .reduced .work, .reduced .flow-mask { background: var(--sky); }
-.reduced .fashion { background: #fff3b0; }
+.reduced .fashion { background: #bdbacb; }
 .reduced .research { background: #f3a6aa; }
 .reduced .about { background: var(--blush); }
 .reduced .cv { background: #ffd6b0; }
