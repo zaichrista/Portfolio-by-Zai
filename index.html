@@ -151,7 +151,7 @@
 
     // Scrolling turns the C anti-clockwise and carries us through it: the C moves to the middle of the
     // window and grows, its centre fades to sky blue, and the blue ends up filling the whole window.
-    var DEG_PER_PX = 0.1, FOLLOW = 0.14;   // FOLLOW: share of the gap to the scroll position closed each 60Hz frame (lower = floatier)
+    var DEG_PER_PX = 0.1, FOLLOW = 0.42;   // FOLLOW: share of the gap to the scroll position closed each 60Hz frame (lower = floatier, higher = tighter)
     var HINT_IDLE_MS = 900;              // how long scrolling must stop before "(keep going)" appears
     var RANGE_VH = 1.5;                  // scroll distance (in window heights) over which the zoom plays
     var ABOUT_HOLD_VH = 0;               // extra scrolling the about section stays centred for (0 = not sticky)
