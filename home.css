@@ -86,6 +86,12 @@ a { color: inherit; text-decoration: none; }
   padding: 3vw 0; border-top: 1px solid #000; transition: opacity .3s ease;
 }
 .rows li:last-child .row { border-bottom: 1px solid #000; }
+/* Desktop scroll: work and research each fill the window exactly, with the label and rows centred in it. The rows size from the
+   window's height as well as its width, so every piece of work stays on screen at any window size. */
+html:not(.static) .work { height: 100vh; height: 100dvh; box-sizing: border-box; padding: 11vh 0; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+html:not(.static) .work .rows { margin-top: 3vh; }
+html:not(.static) .work .row { padding: clamp(6px, 1.7vh, 2vw) 0; }
+html:not(.static) .work .brand { font-size: clamp(15px, min(3.3vw, 5.2vh), 68px); }
 .brand { font-size: clamp(22px, 4.1vw, 84px); line-height: 1; letter-spacing: -.01em; }
 .role, .more { font-size: var(--small); }
 .more span { display: inline-block; transition: transform .25s ease; }
