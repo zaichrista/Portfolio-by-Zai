@@ -142,3 +142,13 @@ a:hover { text-decoration-thickness: 2px; }
 .press li b { font-weight: 500; }
 .no-enter .press, .in-iris .press { animation: none; }
 @media (max-width: 860px) { .press { grid-column: 1; grid-row: auto; position: relative; top: auto; order: 4; margin-top: 4vh; } .press li { grid-template-columns: 8em 1fr; } }
+
+/* Oxford Fashion Gala: the photographs stand in for the website preview, in the right column, two across (landscapes span both) */
+.project:has(.gala-photos) { grid-template-rows: auto auto auto 1fr; }
+.gala-photos { grid-column: 2; grid-row: 1 / span 4; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1vw; align-items: start; animation: rise .9s cubic-bezier(.2, .7, .2, 1) .3s backwards; }
+.gala-photos figure { margin: 0; }
+.gala-photos .wide { grid-column: 1 / -1; }
+.gala-photos img { display: block; width: 100%; height: auto; background: #e8e1cc; }
+.no-enter .gala-photos, .in-iris .gala-photos { animation: none; }
+@media (prefers-reduced-motion: reduce) { .gala-photos { animation: none; } }
+@media (max-width: 860px) { .project:has(.gala-photos) { grid-template-rows: none; } .gala-photos { grid-column: 1; grid-row: auto; order: 4; margin-top: 4vh; gap: 8px; } }
